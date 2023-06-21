@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
  sequelize.define('categoria', {
-  idcat: {  type: DataTypes.INTEGER, primaryKey: true, allowNull: false, },
+  idcat: {  type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   nombrecat: { type: DataTypes.STRING, allowNull: true, },
   desccat: { type: DataTypes.STRING, allowNull: true, },
   });
