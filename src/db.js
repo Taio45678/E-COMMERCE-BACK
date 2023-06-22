@@ -3,7 +3,7 @@ const { Sequelize } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
-const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/dogs`, {
+const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/shoppie`, {
   logging: false, 
   native: false, 
 });
@@ -22,19 +22,18 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 
 sequelize.models = Object.fromEntries(capsEntries);
 
-//const {  Temperamento, Can } = sequelize.models;
+const {  carrocompra, Categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = sequelize.models; 
 
-//const User = require('./models/User.js')(sequelize);
+Fotoprod.belongsToMany(Producto, { through: 'fotosdelproducto' });
 
-// User.findByPk = async (id) => {
-//  try {
-//    const user = await User.findOne({ where: { id } });
-//    return user;
-//  } catch (err) {
-//    throw err;
-//  }
-// };
-// Temperamento.belongsToMany(Can, { through: 'CanTemperamento' });
+// Fotoprod.hasmanysTo(Producto, { through: 'fotosdelproducto' });
+Usuario.belongsToMany(Ordencompra, { through: 'ocxusuario' });
+Ordencompra.belongsToMany(Usuario, { through: 'ocxusuario' });
 
+Producto.belongsToMany(Ordencompra, { through: 'prodxoc' });
+Ordencompra.belongsToMany(Producto, { through: 'prodxoc' });
+
+Producto.belongsToMany(Categoria, { through: 'prodxcateg' });
+Categoria.belongsToMany(Producto, { through: 'prodxcateg' });
 
 module.exports = {...sequelize.models, conn: sequelize, };
