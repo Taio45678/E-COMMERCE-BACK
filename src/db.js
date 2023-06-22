@@ -22,19 +22,18 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 
 sequelize.models = Object.fromEntries(capsEntries);
 
-const {  carrocompra, categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = sequelize.models; 
-
-
+const {  carrocompra, Categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = sequelize.models; 
 
 Fotoprod.belongsToMany(Producto, { through: 'fotosdelproducto' });
 
 // Fotoprod.hasmanysTo(Producto, { through: 'fotosdelproducto' });
-
 Usuario.belongsToMany(Ordencompra, { through: 'ocxusuario' });
 Ordencompra.belongsToMany(Usuario, { through: 'ocxusuario' });
 
 Producto.belongsToMany(Ordencompra, { through: 'prodxoc' });
 Ordencompra.belongsToMany(Producto, { through: 'prodxoc' });
 
+Producto.belongsToMany(Categoria, { through: 'prodxcateg' });
+Categoria.belongsToMany(Producto, { through: 'prodxcateg' });
 
 module.exports = {...sequelize.models, conn: sequelize, };

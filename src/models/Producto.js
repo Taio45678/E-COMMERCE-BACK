@@ -6,5 +6,6 @@ module.exports = (sequelize) => {
   descproducto: { type: DataTypes.STRING, allowNull: true, },
   precioproducto: { type: DataTypes.STRING, allowNull: true,  },
   disponibproducto: { type: DataTypes.STRING, allowNull: true,  },
+  idcategoria: { type: DataTypes.INTEGER, allowNull: true },
   });
 };
