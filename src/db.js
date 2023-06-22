@@ -22,19 +22,11 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 
 sequelize.models = Object.fromEntries(capsEntries);
 
-//const {  Temperamento, Can } = sequelize.models;
+const {  carrocompra, categoria, ordencompra, Producto, Fotoprod  } = sequelize.models; 
 
-//const User = require('./models/User.js')(sequelize);
 
-// User.findByPk = async (id) => {
-//  try {
-//    const user = await User.findOne({ where: { id } });
-//    return user;
-//  } catch (err) {
-//    throw err;
-//  }
-// };
-// Temperamento.belongsToMany(Can, { through: 'CanTemperamento' });
+Producto.belongsToMany(Fotoprod, { through: 'fotoconproducto' });
+
 
 
 module.exports = {...sequelize.models, conn: sequelize, };
