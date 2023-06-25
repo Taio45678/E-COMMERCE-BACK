@@ -13,26 +13,14 @@ const getProductos = async (req, res, next) => {
 // Crear un nuevo producto
 const crearProducto = async (req, res, next) => {
   try {
-
     const { nombreproducto, descproducto, precioproducto, disponibproducto, idcategoria } = req.body;
-
-    const { nombreproducto,descproducto,fotoprinc,precioproducto,disponibproducto,fotosecund,categori  } = req.body;
-
 
     const nuevoProducto = await Producto.create({
       nombreproducto,
       descproducto,
-
       precioproducto,
       disponibproducto,
       idcategoria,
-
-      fotoprinc,
-      precioproducto,
-      disponibproducto,
-      fotosecund,
-      categori,
-
     });
 
     res.status(201).json(nuevoProducto);
@@ -45,11 +33,7 @@ const crearProducto = async (req, res, next) => {
 const actualizarProducto = async (req, res, next) => {
   try {
     const { id } = req.params;
-
     const { nombreproducto, descproducto, precioproducto, disponibproducto, idcategoria } = req.body;
-
-    const { nombreproducto,descproducto,fotoprinc,precioproducto,disponibproducto,fotosecund,categori  } = req.body;
-
 
     const producto = await Producto.findByPk(id);
 
@@ -60,17 +44,9 @@ const actualizarProducto = async (req, res, next) => {
     await producto.update({
       nombreproducto,
       descproducto,
-
       precioproducto,
       disponibproducto,
       idcategoria,
-
-      fotoprinc,
-      precioproducto,
-      disponibproducto,
-      fotosecund,
-      categori,
-
     });
 
     res.json(producto);

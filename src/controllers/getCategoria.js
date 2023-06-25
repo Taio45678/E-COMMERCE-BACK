@@ -17,4 +17,4 @@ const getCategorias = async (req, res) => {
     res.status(500).send('Error al obtener los temperamentos');
   }
 };
-module.exports = { getCategorias };
+module.exports =  getCategorias ;
