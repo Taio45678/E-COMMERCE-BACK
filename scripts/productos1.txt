@@ -1,0 +1,5 @@
+1,Gafas Oculus Quest 1,gafas realidad virtual,500000,completa,2,2023-06-21 23:10:14.035704-04,2023-06-21 23:10:14.035704-04
+2,Gafas Oculus Quest 2,gafas realidad virtual pro,700000,completa,2,2023-06-21 23:51:27.900486-04,2023-06-21 23:51:27.900486-04
+3,Gafas Oculus Quest 1,gafas realidad virtual,500000,completa,2,2023-06-21 23:51:27.900486-04,2023-06-21 23:51:27.900486-04
+4,TELEVISION SMART SONY S1,TV smart,500000,completa,2,2023-06-21 23:51:27.900486-04,2023-06-21 23:51:27.900486-04
+5,SONY VAIO TROKI 1,gafas realidad virtual,500000,completa,2,2023-06-21 23:51:27.900486-04,2023-06-21 23:51:27.900486-04
