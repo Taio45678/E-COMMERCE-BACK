@@ -1,4 +1,6 @@
+
 const productos   = require('../dbdummy.js');
+
 
 const getProduct = async (req,resp) =>
 {
