@@ -1,3 +1,5 @@
+
+
 const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
  sequelize.define('producto', {
@@ -8,7 +10,7 @@ module.exports = (sequelize) => {
   fotoprinc: { type: DataTypes.STRING, allowNull: true, },
   precioproducto: { type: DataTypes.STRING, allowNull: true,  },
   disponibproducto: { type: DataTypes.STRING, allowNull: true,  },
-  fotosecund: { type: DataTypes.STRING, allowNull: true, },
-  categoria: { type: DataTypes.STRING, allowNull: true, },
+  fotosecund: { type: DataTypes.STRING, allowNull: true },
+  categori: { type: DataTypes.STRING, allowNull: true },
   });
 };

@@ -1,3 +1,4 @@
+
 const getCategorias = require('../controllers/getCategoria.js');
 const getProduct = require('../controllers/getProduct');
 const getProductById = require('../controllers/getProdById');
@@ -37,9 +38,5 @@ router.get('/productos', (req, res) => {
 
  res.json(paginatedProductos);
 });
-
-
-
-
 
 module.exports = router ;
