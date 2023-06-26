@@ -9,6 +9,11 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+
+
+module.exports = 
+  getUsers;
+
 const createUser = async (req, res, next) => {
   try {
     const { login, username, password, rol } = req.body;
@@ -30,3 +35,4 @@ module.exports = {
   getUsers,
   createUser,
 };
+
