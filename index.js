@@ -1,11 +1,9 @@
-const express = require('express');
-const app = express();
-const routes = require('./routes');
+const server = require('./src/app.js');
+const { conn } = require('./src/db.js');
 
-app.use('/api', routes);
-
-// Resto de la configuración de la aplicación...
-
-app.listen(3001, () => {
-  console.log('Servidor escuchando en el puerto 3001');
+// Syncing all the models at once.
+conn.sync({ force: false }).then(() => {
+  server.listen(3001, () => {
+    console.log('%s listening at 3001'); // eslint-disable-line no-console
+  });
 });

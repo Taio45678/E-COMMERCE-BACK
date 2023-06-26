@@ -28,13 +28,14 @@ async function obtenerProductos(req, res) {
   }
 }
 
-
 // Controlador para crear un nuevo producto
-async function crearProducto(req, res) {
-  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categori } = req.body;
-
+const crearProducto = async (req, res) => {
   try {
-    const producto = await Producto.create({
+    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categori } = req.body;
+    
+    // Lógica para crear un nuevo producto en la base de datos
+    const newProduct = await Producto.create({
+      id,
       nombreproducto,
       descproducto,
       colorproducto,
@@ -45,12 +46,12 @@ async function crearProducto(req, res) {
       categori
     });
 
-    res.status(201).json(producto);
+    res.status(201).json(newProduct);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ mensaje: 'Error al crear el producto' });
+    console.error('Error al crear un nuevo producto:', error);
+    res.status(500).json({ error: 'Error al crear un nuevo producto' });
   }
-}
+};
 
 // Controlador para obtener un producto por su ID
 async function obtenerProductoPorId(req, res) {
