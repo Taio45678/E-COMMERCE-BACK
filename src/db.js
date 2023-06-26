@@ -22,20 +22,21 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 
 sequelize.models = Object.fromEntries(capsEntries);
 
-const {  carrocompra, Categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = sequelize.models; 
+const {  carrocompra, Categoria, Ordencompra, Usuario,  Producto } = sequelize.models; 
+//aqui irian las relaciones.
+carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+carrocompra.belongsTo(Producto, { foreignKey: 'idproducto' });
 
+producto.belongsTo(Categoria, { foreignKey: 'categori' });
 
-// Fotoprod.belongsToMany(Producto, { through: 'fotosdelproducto' });
-// Fotoprod.hasmanysTo(Producto, { through: 'fotosdelproducto' });
+ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
 
-// Usuario.belongsToMany(Ordencompra, { through: 'ocxusuario' });
-// Ordencompra.belongsToMany(Usuario, { through: 'ocxusuario' });
+Usuario.hasMany(carrocompra, { foreignKey: 'idusuario' });
+Usuario.hasMany(ordencompra, { foreignKey: 'idusuario' });
 
-// Producto.belongsToMany(Ordencompra, { through: 'prodxoc' });
-// Ordencompra.belongsToMany(Producto, { through: 'prodxoc' });
+Categoria.hasMany(producto, { foreignKey: 'categori' });
 
-// Producto.belongsToMany(Categoria, { through: 'prodxcateg' });
+Producto.hasMany(carrocompra, { foreignKey: 'idproducto' });
 
-// Categoria.belongsToMany(Producto, { through: 'prodxcateg' });
 
 module.exports = {...sequelize.models, conn: sequelize, };
