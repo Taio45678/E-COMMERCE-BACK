@@ -3,14 +3,14 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DB_URL } = process.env;
-const UsuarioModel = require('./models/usuario');
+const UsuarioModel = require('./models/Usuario');
 //const AdministradorModel = require('./models/Administrador');
-const ProductoModel = require('./models/producto');
-const CategoriaModel = require('./models/categoria');
-const CarritoCompraModel = require('./models/carrocompra');
-const OrdenCompraModel = require('./models/ordencompra');
-const ReviewModel = require('./models/review');
-const FotoProdModel = require('./models/fotoprod');
+const ProductoModel = require('./models/Producto');
+const CategoriaModel = require('./models/Categorias');
+const CarritoCompraModel = require('./models/Carrocompra');
+const OrdenCompraModel = require('./models/Ordencompra');
+const ReviewModel = require('./models/Review');
+const FotoProdModel = require('./models/Fotoprod');
 
 let sequelize =
   process.env.NODE_ENV === "production"
@@ -45,24 +45,24 @@ let sequelize =
 
 // Definir las relaciones entre los modelos
 const initializeRelations = () => {
-  const { Usuario, Producto, CarritoCompra, OrdenCompra, Review, Categoria } = sequelize.models;
+  const { Usuario, Producto, CarroCompra, Ordencompra, Review, Categoria } = sequelize.models;
 
   // Relaciones del modelo Usuario
-  Usuario.hasOne(CarritoCompra);
-  Usuario.hasMany(OrdenCompra);
+  Usuario.hasOne(CarroCompra);
+  Usuario.hasMany(Ordencompra);
   Usuario.hasMany(Review);
 
   // Relaciones del modelo CarritoCompra
-  CarritoCompra.belongsTo(Usuario);
-  CarritoCompra.belongsToMany(Producto, { through: 'CarritoProducto' });
+  CarroCompra.belongsTo(Usuario);
+  CarroCompra.belongsToMany(Producto, { through: 'CarritoProducto' });
 
   // Relaciones del modelo OrdenCompra
-  OrdenCompra.belongsTo(Usuario);
-  OrdenCompra.belongsToMany(Producto, { through: 'OrdenProducto' });
+  Ordencompra.belongsTo(Usuario);
+  Ordencompra.belongsToMany(Producto, { through: 'OrdenProducto' });
 
   // Relaciones del modelo Producto
-  Producto.belongsToMany(CarritoCompra, { through: 'CarritoProducto' });
-  Producto.belongsToMany(OrdenCompra, { through: 'OrdenProducto' });
+  Producto.belongsToMany(CarroCompra, { through: 'CarritoProducto' });
+  Producto.belongsToMany(Ordencompra, { through: 'OrdenProducto' });
   Producto.hasMany(Review);
   Producto.belongsTo(Categoria);
 
