@@ -70,21 +70,16 @@ const initializeRelations = () => {
   Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
   Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
 
-  Producto.hasMany(Review, { foreignKey: 'productoId' });
-  Review.belongsTo(Producto, { foreignKey: 'productoId' });
+  Producto.hasMany(Review, { foreignKey: 'idproducto' });
+  Review.belongsTo(Producto, { foreignKey: 'idproducto' });
 
-  Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
-  Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+  Producto.hasMany(Fotoprod, { foreignKey: 'idproducto' });
+  Fotoprod.belongsTo(Producto, { foreignKey: 'idproducto' });
 };
 
+initializeRelations();
+
 module.exports = {
-  Carrocompra,
-  Categoria,
-  Ordencompra,
-  Usuario,
-  Producto,
-  Fotoprod,
-  Review,
-  conn: sequelize,
-  initializeRelations,
+  ...sequelize.models,
+  sequelize,
 };
