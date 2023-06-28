@@ -70,25 +70,23 @@ const {  carrocompra, Categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = 
 
 // Aca vendrian las relaciones
 
-carrocompra.belongsTo(Usuario); // Un carrito de compras pertenece a un usuario
-Usuario.hasOne(carrocompra); // Un usuario puede tener un carrito de compras
+CarroCompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+  Usuario.hasOne(CarroCompra, { foreignKey: 'idusuario' });
 
-carrocompra.belongsToMany(Producto, { through: 'prodxcarro' }); // Un carrito de compras puede tener múltiples productos
-Producto.belongsToMany(carrocompra, { through: 'prodxcarro' }); // Un producto puede estar presente en varios carritos de compras
+  CarroCompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
+  Producto.belongsToMany(CarroCompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
 
+  OrdenCompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+  Usuario.hasMany(OrdenCompra, { foreignKey: 'idusuario' });
 
-Ordencompra.belongsTo(Usuario); // Una orden de compra pertenece a un usuario
-Usuario.hasMany(Ordencompra); // Un usuario puede realizar múltiples órdenes de compra
+  OrdenCompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
+  Producto.belongsToMany(OrdenCompra, { through: 'prodxoc', foreignKey: 'idproducto' });
 
-Ordencompra.belongsToMany(Producto, { through: 'prodxoc' }); // Una orden de compra puede contener varios productos
-Producto.belongsToMany(Ordencompra, { through: 'prodxoc' }); // Un producto puede estar presente en varias órdenes de compra
+  Producto.hasMany(Review, { foreignKey: 'productoId' });
+  Review.belongsTo(Producto, { foreignKey: 'productoId' });
 
-Producto.hasMany(Review);
-Review.belongsTo(Producto);
-
-User.hasMany(Review);
-Review.belongsTo(User);
-
+  Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
+  Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
 // Model.belongsToMany(otherModel, { through: 'activities_countries' });
 
 module.exports = {
