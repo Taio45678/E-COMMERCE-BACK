@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
- constmodule.exports = (sequelize) => {
+ module.exports = (sequelize) => {
   const fotoProd = sequelize.define('fotoprod', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     urlfotoprod: { type: DataTypes.STRING, allowNull: false },
