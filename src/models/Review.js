@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define('review', {
+ const Review = sequelize.define('review', {
     description: {
       type: DataTypes.STRING,
     },
@@ -20,4 +20,5 @@ module.exports = (sequelize) => {
       references: { model: 'Usuario', key: 'id' },
     },
   });
+  return Review;
 };

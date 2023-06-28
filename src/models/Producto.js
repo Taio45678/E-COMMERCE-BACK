@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
-  sequelize.define('producto', {
+  const Producto = sequelize.define('producto', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     nombreproducto: { type: DataTypes.STRING, allowNull: true },
     descproducto: { type: DataTypes.STRING, allowNull: true },
@@ -16,4 +16,5 @@ module.exports = (sequelize) => {
       defaultValue: false,
     },
   });
+  return Producto;
 };
