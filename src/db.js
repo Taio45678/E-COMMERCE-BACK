@@ -66,27 +66,28 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const {  carrocompra, Categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = sequelize.models; 
+const {  carrocompra, categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = sequelize.models; 
 
 // Aca vendrian las relaciones
 
 carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-  Usuario.hasOne(carrocompra, { foreignKey: 'idusuario' });
+Usuario.hasOne(carrocompra);
 
-  carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
-  Producto.belongsToMany(carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
+carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
+Producto.belongsToMany(carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
 
-  Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-  Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
+Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
 
-  Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
-  Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
+Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
+Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
 
-  Producto.hasMany(Review, { foreignKey: 'productoId' });
-  Review.belongsTo(Producto, { foreignKey: 'productoId' });
+Producto.hasMany(Review, { foreignKey: 'productoId' });
+Review.belongsTo(Producto, { foreignKey: 'productoId' });
 
-  Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
-  Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
+Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+
 // Model.belongsToMany(otherModel, { through: 'activities_countries' });
 
 module.exports = {
