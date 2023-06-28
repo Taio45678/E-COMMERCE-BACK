@@ -34,33 +34,25 @@ modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize));
 
 // Define las relaciones entre los modelos
 const initializeRelations = () => {
-  const {
-    Carrocompra,
-    Categoria,
-    Ordencompra,
-    Usuario,
-    Producto,
-    Fotoprod,
-    Review,
-  } = sequelize.models;
+  const { carrocompra, categoria, ordencompra, usuario, producto, fotoprod, review } = sequelize.models;
 
-  Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-  Usuario.hasOne(Carrocompra, { foreignKey: 'idusuario' });
+  carrocompra.belongsTo(usuario, { foreignKey: 'idusuario' });
+  usuario.hasOne(carrocompra, { foreignKey: 'idusuario' });
 
-  Carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
-  Producto.belongsToMany(Carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
+  carrocompra.belongsToMany(producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
+  producto.belongsToMany(carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
 
-  Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-  Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
+  ordencompra.belongsTo(usuario, { foreignKey: 'idusuario' });
+  usuario.hasMany(ordencompra, { foreignKey: 'idusuario' });
 
-  Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
-  Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
+  ordencompra.belongsToMany(producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
+  producto.belongsToMany(ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
 
-  Producto.hasMany(Review, { foreignKey: 'idproducto' });
-  Review.belongsTo(Producto, { foreignKey: 'idproducto' });
+  producto.hasMany(review, { foreignKey: 'idproducto' });
+  review.belongsTo(producto, { foreignKey: 'idproducto' });
 
-  Producto.hasMany(Fotoprod, { foreignKey: 'idproducto' });
-  Fotoprod.belongsTo(Producto, { foreignKey: 'idproducto' });
+  producto.hasMany(fotoprod, { foreignKey: 'idproducto' });
+  fotoprod.belongsTo(producto, { foreignKey: 'idproducto' });
 };
 
 // Sincroniza los modelos con la base de datos y establece las relaciones
