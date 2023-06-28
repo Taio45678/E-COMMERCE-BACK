@@ -67,16 +67,28 @@ const {
 } = sequelize.models;
 
 CarroCompra.belongsTo(Usuario, { foreignKey: "idusuario" });
-Usuario.hasOne(CarroCompra);
+Usuario.hasOne(CarroCompra, { foreignKey: "idusuario" });
 
-CarroCompra.belongsToMany(Producto, { through: "prodxcarro", foreignKey: "idcarrocompra" });
-Producto.belongsToMany(CarroCompra, { through: "prodxcarro", foreignKey: "idproducto" });
+CarroCompra.belongsToMany(Producto, {
+  through: "prodxcarro",
+  foreignKey: "idcarrocompra",
+});
+Producto.belongsToMany(CarroCompra, {
+  through: "prodxcarro",
+  foreignKey: "idproducto",
+});
 
 OrdenCompra.belongsTo(Usuario, { foreignKey: "idusuario" });
 Usuario.hasMany(OrdenCompra, { foreignKey: "idusuario" });
 
-OrdenCompra.belongsToMany(Producto, { through: "prodxoc", foreignKey: "idordencompra" });
-Producto.belongsToMany(OrdenCompra, { through: "prodxoc", foreignKey: "idproducto" });
+OrdenCompra.belongsToMany(Producto, {
+  through: "prodxoc",
+  foreignKey: "idordencompra",
+});
+Producto.belongsToMany(OrdenCompra, {
+  through: "prodxoc",
+  foreignKey: "idproducto",
+});
 
 Producto.hasMany(Review, { foreignKey: "productoId" });
 Review.belongsTo(Producto, { foreignKey: "productoId" });
