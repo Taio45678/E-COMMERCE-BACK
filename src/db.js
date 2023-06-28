@@ -3,14 +3,14 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DB_URL } = process.env;
-const UsuarioModel = require('./models/Usuario');
+const UsuarioModel = require('./models/Usuario.js');
 //const AdministradorModel = require('./models/Administrador');
-const ProductoModel = require('./models/Producto');
-const CategoriaModel = require('./models/Categorias');
-const CarritoCompraModel = require('./models/Carrocompra');
-const OrdenCompraModel = require('./models/Ordencompra');
-const ReviewModel = require('./models/Review');
-const FotoProdModel = require('./models/Fotoprod');
+const ProductoModel = require('./models/Producto.js');
+const CategoriaModel = require('./models/Categorias.js');
+const CarritoCompraModel = require('./models/Carrocompra.js');
+const OrdenCompraModel = require('./models/Ordencompra.js');
+const ReviewModel = require('./models/Review.js');
+const FotoProdModel = require('./models/Fotoprod.js');
 
 let sequelize =
   process.env.NODE_ENV === "production"
