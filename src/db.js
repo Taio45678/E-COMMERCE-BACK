@@ -45,23 +45,23 @@ let sequelize =
 
 // Definir las relaciones entre los modelos
 const initializeRelations = () => {
-  const { Usuario, Producto, CarroCompra, Ordencompra, Review, Categoria } = sequelize.models;
+  const { Usuario, Producto, Carrocompra, Ordencompra, Review, Categoria } = sequelize.models;
 
   // Relaciones del modelo Usuario
-  Usuario.hasOne(CarroCompra);
+  Usuario.hasOne(Carrocompra);
   Usuario.hasMany(Ordencompra);
   Usuario.hasMany(Review);
 
   // Relaciones del modelo CarritoCompra
-  CarroCompra.belongsTo(Usuario);
-  CarroCompra.belongsToMany(Producto, { through: 'CarritoProducto' });
+  Carrocompra.belongsTo(Usuario);
+  Carrocompra.belongsToMany(Producto, { through: 'CarritoProducto' });
 
   // Relaciones del modelo OrdenCompra
   Ordencompra.belongsTo(Usuario);
   Ordencompra.belongsToMany(Producto, { through: 'OrdenProducto' });
 
   // Relaciones del modelo Producto
-  Producto.belongsToMany(CarroCompra, { through: 'CarritoProducto' });
+  Producto.belongsToMany(Carrocompra, { through: 'CarritoProducto' });
   Producto.belongsToMany(Ordencompra, { through: 'OrdenProducto' });
   Producto.hasMany(Review);
   Producto.belongsTo(Categoria);
@@ -88,7 +88,7 @@ sequelize.sync({ force: false })
 module.exports = {
   Usuario: UsuarioModel,
   Producto: ProductoModel,
-  CarritoCompra: CarritoCompraModel,
+  Carrocompra: CarritoCompraModel,
   OrdenCompra: OrdenCompraModel,
   Review: ReviewModel,
   Categoria: CategoriaModel,
