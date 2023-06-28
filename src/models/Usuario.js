@@ -5,32 +5,30 @@ module.exports = (sequelize) => {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true
+      primaryKey: true,
     },
     login: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true
-      }
+        isEmail: true,
+      },
     },
     username: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
     },
     rol: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        isIn: [[1, 2]] // 1 para usuario, 2 para admin
-      }
-    }
+        isIn: [[1, 2]], // 1 para usuario, 2 para admin
+      },
+    },
   });
-
-  
 };

@@ -56,45 +56,25 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // Aca vendrian las relaciones
 
-const {
-  CarroCompra,
-  Categoria,
-  OrdenCompra,
-  Usuario,
-  Producto,
-  Fotoprod,
-  Review,
-} = sequelize.models;
+const { CarroCompra, Categoria, FotoProd, OrdenCompra, Producto, Review, Usuario } = sequelize.models;
 
-CarroCompra.belongsTo(Usuario, { foreignKey: "idusuario" });
-Usuario.hasOne(CarroCompra, { foreignKey: "idusuario" });
+CarroCompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+Usuario.hasOne(CarroCompra, { foreignKey: 'idusuario' });
 
-CarroCompra.belongsToMany(Producto, {
-  through: "prodxcarro",
-  foreignKey: "idcarrocompra",
-});
-Producto.belongsToMany(CarroCompra, {
-  through: "prodxcarro",
-  foreignKey: "idproducto",
-});
+CarroCompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
+Producto.belongsToMany(CarroCompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
 
-OrdenCompra.belongsTo(Usuario, { foreignKey: "idusuario" });
-Usuario.hasMany(OrdenCompra, { foreignKey: "idusuario" });
+OrdenCompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+Usuario.hasMany(OrdenCompra, { foreignKey: 'idusuario' });
 
-OrdenCompra.belongsToMany(Producto, {
-  through: "prodxoc",
-  foreignKey: "idordencompra",
-});
-Producto.belongsToMany(OrdenCompra, {
-  through: "prodxoc",
-  foreignKey: "idproducto",
-});
+OrdenCompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
+Producto.belongsToMany(OrdenCompra, { through: 'prodxoc', foreignKey: 'idproducto' });
 
-Producto.hasMany(Review, { foreignKey: "productoId" });
-Review.belongsTo(Producto, { foreignKey: "productoId" });
+Producto.hasMany(Review, { foreignKey: 'productoId' });
+Review.belongsTo(Producto, { foreignKey: 'productoId' });
 
-Usuario.hasMany(Review, { foreignKey: "usuarioId" });
-Review.belongsTo(Usuario, { foreignKey: "usuarioId" });
+Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
+Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
 
 module.exports = {
   ...sequelize.models,
