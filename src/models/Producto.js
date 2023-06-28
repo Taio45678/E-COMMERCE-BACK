@@ -9,7 +9,7 @@ module.exports = (sequelize) => {
     precioproducto: { type: DataTypes.STRING, allowNull: true },
     disponibproducto: { type: DataTypes.STRING, allowNull: true },
     fotosecund: { type: DataTypes.STRING, allowNull: true },
-    categoria: { type: DataTypes.STRING, allowNull: false, references: { model: 'categoria', key: 'id' } },
+    categoria: { type: DataTypes.STRING, allowNull: false},
     borrador: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
