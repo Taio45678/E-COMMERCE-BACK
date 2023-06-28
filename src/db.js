@@ -3,6 +3,14 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DB_URL } = process.env;
+const UsuarioModel = require('./models/Usuario');
+const AdministradorModel = require('./models/Administrador');
+const ProductoModel = require('./models/Producto');
+const CategoriaModel = require('./models/Categoria');
+const CarritoCompraModel = require('./models/CarritoCompra');
+const OrdenCompraModel = require('./models/Ordencompra');
+const ReviewModel = require('./models/Review');
+const FotoProdModel = require('./models/Fotoprod');
 
 let sequelize =
   process.env.NODE_ENV === "production"
@@ -33,45 +41,39 @@ let sequelize =
       { logging: false, native: false }
     );
 
-const basename = path.basename(__filename);
-const modelDefiners = [];
 
-fs.readdirSync(path.join(__dirname, "/models"))
-  .filter(
-    (file) =>
-      file.indexOf(".") !== 0 && file !== basename && file.slice(-3) === ".js"
-  )
-  .forEach((file) => {
-    const modelDefiner = require(path.join(__dirname, "/models", file));
-    modelDefiners.push(modelDefiner);
-  });
 
-modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize));
-
-// Define las relaciones entre los modelos
+// Definir las relaciones entre los modelos
 const initializeRelations = () => {
-  const { carrocompra, categoria, ordencompra, usuario, producto, fotoprod, review } = sequelize.models;
+  const { Usuario, Producto, CarritoCompra, OrdenCompra, Review, Categoria } = sequelize.models;
 
-  carrocompra.belongsTo(usuario, { foreignKey: 'idusuario' });
-  usuario.hasOne(carrocompra, { foreignKey: 'idusuario' });
+  // Relaciones del modelo Usuario
+  Usuario.hasOne(CarritoCompra);
+  Usuario.hasMany(OrdenCompra);
+  Usuario.hasMany(Review);
 
-  carrocompra.belongsToMany(producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
-  producto.belongsToMany(carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
+  // Relaciones del modelo CarritoCompra
+  CarritoCompra.belongsTo(Usuario);
+  CarritoCompra.belongsToMany(Producto, { through: 'CarritoProducto' });
 
-  ordencompra.belongsTo(usuario, { foreignKey: 'idusuario' });
-  usuario.hasMany(ordencompra, { foreignKey: 'idusuario' });
+  // Relaciones del modelo OrdenCompra
+  OrdenCompra.belongsTo(Usuario);
+  OrdenCompra.belongsToMany(Producto, { through: 'OrdenProducto' });
 
-  ordencompra.belongsToMany(producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
-  producto.belongsToMany(ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
+  // Relaciones del modelo Producto
+  Producto.belongsToMany(CarritoCompra, { through: 'CarritoProducto' });
+  Producto.belongsToMany(OrdenCompra, { through: 'OrdenProducto' });
+  Producto.hasMany(Review);
+  Producto.belongsTo(Categoria);
 
-  producto.hasMany(review, { foreignKey: 'idproducto' });
-  review.belongsTo(producto, { foreignKey: 'idproducto' });
+  // Relaciones del modelo Review
+  Review.belongsTo(Producto);
+  Review.belongsTo(Usuario);
 
-  producto.hasMany(fotoprod, { foreignKey: 'idproducto' });
-  fotoprod.belongsTo(producto, { foreignKey: 'idproducto' });
+  // Resto de relaciones...
 };
 
-// Sincroniza los modelos con la base de datos y establece las relaciones
+// Sincronizar los modelos con la base de datos y establecer las relaciones
 sequelize.sync({ force: false })
   .then(() => {
     console.log('Tablas sincronizadas correctamente');
@@ -82,7 +84,13 @@ sequelize.sync({ force: false })
     console.error('Error al sincronizar las tablas:', error);
   });
 
+// Exportar los modelos y Sequelize
 module.exports = {
-  ...sequelize.models,
+  Usuario: UsuarioModel,
+  Producto: ProductoModel,
+  CarritoCompra: CarritoCompraModel,
+  OrdenCompra: OrdenCompraModel,
+  Review: ReviewModel,
+  Categoria: CategoriaModel,
   sequelize,
 };
