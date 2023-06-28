@@ -72,16 +72,15 @@ const initializeRelations = () => {
 };
 
 // Sincroniza los modelos con la base de datos y establece las relaciones
-(async () => {
-  try {
-    await sequelize.sync({ alter: true });
+sequelize.sync({ force: false })
+  .then(() => {
+    console.log('Tablas sincronizadas correctamente');
     initializeRelations();
-    console.log("Base de datos sincronizada y relaciones establecidas correctamente.");
-  } catch (error) {
-    console.error("Error al sincronizar la base de datos:", error);
-  }
-})();
-
+    // Aquí puedes continuar con el resto de tu lógica de la aplicación
+  })
+  .catch(error => {
+    console.error('Error al sincronizar las tablas:', error);
+  });
 module.exports = {
   ...sequelize.models,
   sequelize,
