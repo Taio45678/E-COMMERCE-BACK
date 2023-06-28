@@ -19,6 +19,7 @@ module.exports = (sequelize) => {
       allowNull: false,
       references: { model: 'Usuario', key: 'id' },
     },
+    tableName: 'reviews',
   });
   return Review;
 };

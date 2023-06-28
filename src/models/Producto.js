@@ -15,6 +15,7 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: false,
     },
+    tableName: 'productos',
   });
   return Producto;
 };

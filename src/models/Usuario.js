@@ -30,6 +30,7 @@ const Usuario=  sequelize.define('usuario', {
         isIn: [[1, 2]], // 1 para usuario, 2 para admin
       },
     },
+    tableName: 'usuarios',
   });
   return Usuario;
 };

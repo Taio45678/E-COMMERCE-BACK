@@ -4,6 +4,7 @@ module.exports = (sequelize) => {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     nombrecat: { type: DataTypes.STRING, allowNull: false },
     desccat: { type: DataTypes.STRING, allowNull: false },
+    tableName: 'categorias',
   });
   return Categoria;
 };

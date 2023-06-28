@@ -4,6 +4,7 @@ const { DataTypes } = require('sequelize');
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     urlfotoprod: { type: DataTypes.STRING, allowNull: false },
     idproducto: { type: DataTypes.INTEGER, allowNull: false, references: { model: 'producto', key: 'id' } },
+    tableName: 'fotoProds',
   });
   return fotoProd;
 };
