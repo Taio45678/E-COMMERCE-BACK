@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  sequelize.define('Review', {
+  sequelize.define('review', {
     description: {
       type: DataTypes.STRING,
     },
@@ -12,7 +12,7 @@ module.exports = (sequelize) => {
     productoId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: { model: 'Producto', key: 'id' },
+      references: { model: 'producto', key: 'id' },
     },
     usuarioId: {
       type: DataTypes.INTEGER,
