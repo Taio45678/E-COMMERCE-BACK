@@ -56,25 +56,25 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // Aca vendrian las relaciones
 
-const { Carrocompra, Categoria, Fotoprod, Ordencompra, Producto, Review, Usuario } = sequelize.models;
+const { carrocompra, categoria, fotoprod, ordencompra, producto, review, usuario } = sequelize.models;
 
-Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-Usuario.hasOne(Carrocompra, { foreignKey: 'idusuario' });
+carrocompra.belongsTo(usuario, { foreignKey: 'idusuario' });
+usuario.hasOne(carrocompra, { foreignKey: 'idusuario' });
 
-Carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
-Producto.belongsToMany(Carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
+carrocompra.belongsToMany(producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
+producto.belongsToMany(carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
 
-Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
+ordencompra.belongsTo(usuario, { foreignKey: 'idusuario' });
+usuario.hasMany(ordencompra, { foreignKey: 'idusuario' });
 
-Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
-Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
+ordencompra.belongsToMany(producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
+producto.belongsToMany(ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
 
-Producto.hasMany(Review, { foreignKey: 'productoId' });
-Review.belongsTo(Producto, { foreignKey: 'productoId' });
+producto.hasMany(review, { foreignKey: 'productoId' });
+review.belongsTo(producto, { foreignKey: 'productoId' });
 
-Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
-Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+usuario.hasMany(review, { foreignKey: 'usuarioId' });
+review.belongsTo(usuario, { foreignKey: 'usuarioId' });
 
 module.exports = {
   ...sequelize.models,
