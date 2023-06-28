@@ -7,7 +7,7 @@ const Ordencompra =sequelize.define('ordencompra', {
   direnvio: { type: DataTypes.STRING, allowNull: false },
   emailcontac: { type: DataTypes.STRING, allowNull: false },
   estado: { type: DataTypes.STRING, allowNull: false },
-  tableName: 'ordencompra',
+  
 }
 
 );
