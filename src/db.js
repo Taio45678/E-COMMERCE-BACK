@@ -87,6 +87,7 @@ Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
 
   Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
   Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+
 // Model.belongsToMany(otherModel, { through: 'activities_countries' });
 
 module.exports = {
