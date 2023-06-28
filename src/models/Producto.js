@@ -10,5 +10,10 @@ module.exports = (sequelize) => {
   disponibproducto: { type: DataTypes.STRING, allowNull: true,  },
   fotosecund: { type: DataTypes.STRING, allowNull: true, },
   categoria: { type: DataTypes.STRING, allowNull: true, },
+  borrador: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
   });
 };

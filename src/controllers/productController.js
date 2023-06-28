@@ -1,5 +1,6 @@
 const { Producto } = require('../db');
 
+const productValidations = require('../validations/productValidations');
 // Controlador para obtener todos los productos
 async function obtenerProductos(req, res) {
   const { page, limit } = req.query;
@@ -45,6 +46,14 @@ const crearProducto = async (req, res) => {
       fotosecund,
       categoria
     });
+    productValidations.validateNombreProducto(nombreproducto);
+    productValidations.validateDescProducto(descproducto);
+    productValidations.validateColorProducto(colorproducto);
+    productValidations.validateFotoPrinc(fotoprinc);
+    productValidations.validatePrecioProducto(precioproducto);
+    productValidations.validateDisponibProducto(disponibproducto);
+    productValidations.validateFotoSecund(fotosecund);
+    productValidations.validateCategoria(categoria);
 
     res.status(201).json(newProduct);
   } catch (error) {
@@ -74,7 +83,7 @@ async function obtenerProductoPorId(req, res) {
 // Controlador para actualizar un producto
 async function actualizarProducto(req, res) {
   const { id } = req.params;
-  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categori } = req.body;
+  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categoria } = req.body;
 
   try {
     const producto = await Producto.findByPk(id);
@@ -90,7 +99,17 @@ async function actualizarProducto(req, res) {
     producto.precioproducto = precioproducto;
     producto.disponibproducto = disponibproducto;
     producto.fotosecund = fotosecund;
-    producto.categori = categori;
+    producto.categoria = categoria;
+
+    productValidations.validateNombreProducto(nombreproducto);
+    productValidations.validateDescProducto(descproducto);
+    productValidations.validateColorProducto(colorproducto);
+    productValidations.validateFotoPrinc(fotoprinc);
+    productValidations.validatePrecioProducto(precioproducto);
+    productValidations.validateDisponibProducto(disponibproducto);
+    productValidations.validateFotoSecund(fotosecund);
+    productValidations.validateCategoria(categoria);
+
 
     await producto.save();
 
