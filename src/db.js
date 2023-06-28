@@ -57,23 +57,25 @@ const {
 
 // Aca vendrían las relaciones entre los modelos
 
-Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-Usuario.hasOne(Carrocompra, { foreignKey: 'idusuario' });
+const initializeRelations = () => {
+  Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+  Usuario.hasOne(Carrocompra, { foreignKey: 'idusuario' });
 
-Carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
-Producto.belongsToMany(Carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
+  Carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
+  Producto.belongsToMany(Carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
 
-Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
+  Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+  Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
 
-Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
-Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
+  Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
+  Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
 
-Producto.hasMany(Review, { foreignKey: 'productoId' });
-Review.belongsTo(Producto, { foreignKey: 'productoId' });
+  Producto.hasMany(Review, { foreignKey: 'productoId' });
+  Review.belongsTo(Producto, { foreignKey: 'productoId' });
 
-Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
-Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+  Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
+  Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+};
 
 module.exports = {
   Carrocompra,
@@ -84,4 +86,5 @@ module.exports = {
   Fotoprod,
   Review,
   conn: sequelize,
+  initializeRelations,
 };
