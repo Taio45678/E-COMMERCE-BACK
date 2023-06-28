@@ -2,44 +2,34 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST,DB_PORT,DB_NAME,DB_URL } = process.env;
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DB_URL } = process.env;
 
 let sequelize =
   process.env.NODE_ENV === "production"
     ? new Sequelize({
-      database: DB_NAME,
-      dialect: "postgres",
-      host: DB_HOST,
-      port: DB_PORT,
-      username: DB_USER,
-      password: DB_PASSWORD,
-      pool: {
-        max: 3,
-        min: 1,
-        idle: 10000,
-      },
-      dialectOptions: {
-        ssl: {
-          require: true,
-          // Ref.: https://github.com/brianc/node-postgres/issues/2009
-          rejectUnauthorized: false,
+        database: DB_NAME,
+        dialect: "postgres",
+        host: DB_HOST,
+        port: DB_PORT,
+        username: DB_USER,
+        password: DB_PASSWORD,
+        pool: {
+          max: 3,
+          min: 1,
+          idle: 10000,
         },
-        keepAlive: true,
-      },
-      ssl: true,
-    })
-    : new Sequelize(
-      `${DB_URL}`,
-      { logging: false, native: false }
-    );
+        dialectOptions: {
+          ssl: {
+            require: true,
+            // Ref.: https://github.com/brianc/node-postgres/issues/2009
+            rejectUnauthorized: false,
+          },
+          keepAlive: true,
+        },
+        ssl: true,
+      })
+    : new Sequelize(`${DB_URL}`, { logging: false, native: false });
 
-// const sequelize = new Sequelize(
-//   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-//   {
-//     logging: false, // set to console.log to see the raw SQL queries
-//     native: false, // lets Sequelize know we can use pg-native for ~30% more speed
-//   }
-// );
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
@@ -64,33 +54,37 @@ let capsEntries = entries.map((entry) => [
 ]);
 sequelize.models = Object.fromEntries(capsEntries);
 
-// En sequelize.models están todos los modelos importados como propiedades
-// Para relacionarlos hacemos un destructuring
-const {  carrocompra, categoria, Ordencompra, Usuario,  Producto, Fotoprod  } = sequelize.models; 
-
 // Aca vendrian las relaciones
 
-carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-Usuario.hasOne(carrocompra);
+const {
+  CarroCompra,
+  Categoria,
+  OrdenCompra,
+  Usuario,
+  Producto,
+  Fotoprod,
+  Review,
+} = sequelize.models;
 
-carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
-Producto.belongsToMany(carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
+CarroCompra.belongsTo(Usuario, { foreignKey: "idusuario" });
+Usuario.hasOne(CarroCompra);
 
-Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
-Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
+CarroCompra.belongsToMany(Producto, { through: "prodxcarro", foreignKey: "idcarrocompra" });
+Producto.belongsToMany(CarroCompra, { through: "prodxcarro", foreignKey: "idproducto" });
 
-Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
-Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
+OrdenCompra.belongsTo(Usuario, { foreignKey: "idusuario" });
+Usuario.hasMany(OrdenCompra, { foreignKey: "idusuario" });
 
-Producto.hasMany(Review, { foreignKey: 'productoId' });
-Review.belongsTo(Producto, { foreignKey: 'productoId' });
+OrdenCompra.belongsToMany(Producto, { through: "prodxoc", foreignKey: "idordencompra" });
+Producto.belongsToMany(OrdenCompra, { through: "prodxoc", foreignKey: "idproducto" });
 
-Usuario.hasMany(Review, { foreignKey: 'usuarioId' });
-Review.belongsTo(Usuario, { foreignKey: 'usuarioId' });
+Producto.hasMany(Review, { foreignKey: "productoId" });
+Review.belongsTo(Producto, { foreignKey: "productoId" });
 
-// Model.belongsToMany(otherModel, { through: 'activities_countries' });
+Usuario.hasMany(Review, { foreignKey: "usuarioId" });
+Review.belongsTo(Usuario, { foreignKey: "usuarioId" });
 
 module.exports = {
-  ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
-  conn: sequelize, // para importart la conexión { conn } = require('./db.js');
+  ...sequelize.models,
+  conn: sequelize,
 };
