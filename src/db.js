@@ -47,10 +47,11 @@ fs.readdirSync(path.join(__dirname, "/models"))
   });
 
 modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize));
+const { carrocompra, categoria, ordencompra, usuario, producto, fotoprod, review } = sequelize.models;
 
 // Define las relaciones entre los modelos
-const initializeRelations = () => {
-  const { carrocompra, categoria, ordencompra, usuario, producto, fotoprod, review } = sequelize.models;
+/*const initializeRelations = () => {
+  
 
   carrocompra.belongsTo(usuario, { foreignKey: 'idusuario' });
   usuario.hasOne(carrocompra, { foreignKey: 'idusuario' });
@@ -70,12 +71,12 @@ const initializeRelations = () => {
   producto.hasMany(fotoprod, { foreignKey: 'idproducto' });
   fotoprod.belongsTo(producto, { foreignKey: 'idproducto' });
 };
-
+*/
 // Sincroniza los modelos con la base de datos y establece las relaciones
 sequelize.sync({ force: false })
   .then(() => {
     console.log('Tablas sincronizadas correctamente');
-    initializeRelations();
+    //initializeRelations();
     // Aquí puedes continuar con el resto de tu lógica de la aplicación
   })
   .catch(error => {
