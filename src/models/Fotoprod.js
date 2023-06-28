@@ -3,6 +3,6 @@ module.exports = (sequelize) => {
   sequelize.define('fotoprod', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     urlfotoprod: { type: DataTypes.STRING, allowNull: true },
-    idproducto: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'Producto', key: 'id' } },
+    idproducto: { type: DataTypes.INTEGER, allowNull: true, references: { model: 'producto', key: 'id' } },
   });
 };
