@@ -4,32 +4,18 @@ const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DB_URL } = process.env;
 
-
-const sequelize =
-  process.env.NODE_ENV === "production"
-    ? new Sequelize({
-        database: DB_NAME,
-        dialect: "postgres",
-        host: DB_HOST,
-        port: DB_PORT,
-        username: DB_USER,
-        password: DB_PASSWORD,
-        pool: {
-          max: 3,
-          min: 1,
-          idle: 10000,
-        },
-        dialectOptions: {
-          ssl: {
-            require: true,
-            // Ref.: https://github.com/brianc/node-postgres/issues/2009
-            rejectUnauthorized: false,
-          },
-          keepAlive: true,
-        },
-        ssl: true,
-      })
-    : new Sequelize(`${DB_URL}`, { logging: false, native: false });
+const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
+  host: DB_HOST,
+  port: DB_PORT,
+  dialect: "postgres",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+  logging: false,
+});
 
 const basename = path.basename(__filename);
 const modelDefiners = [];
@@ -46,19 +32,18 @@ fs.readdirSync(path.join(__dirname, "/models"))
 
 modelDefiners.forEach((modelDefiner) => modelDefiner(sequelize));
 
-const {
-  Carrocompra,
-  Categoria,
-  Ordencompra,
-  Usuario,
-  Producto,
-  Fotoprod,
-  Review,
-} = sequelize.models;
-
-// Aca vendrían las relaciones entre los modelos
-
+// Define las relaciones entre los modelos
 const initializeRelations = () => {
+  const {
+    Carrocompra,
+    Categoria,
+    Ordencompra,
+    Usuario,
+    Producto,
+    Fotoprod,
+    Review,
+  } = sequelize.models;
+
   Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
   Usuario.hasOne(Carrocompra, { foreignKey: 'idusuario' });
 
@@ -78,7 +63,16 @@ const initializeRelations = () => {
   Fotoprod.belongsTo(Producto, { foreignKey: 'idproducto' });
 };
 
-initializeRelations();
+// Sincroniza los modelos con la base de datos y establece las relaciones
+(async () => {
+  try {
+    await sequelize.sync({ alter: true });
+    initializeRelations();
+    console.log("Base de datos sincronizada y relaciones establecidas correctamente.");
+  } catch (error) {
+    console.error("Error al sincronizar la base de datos:", error);
+  }
+})();
 
 module.exports = {
   ...sequelize.models,
