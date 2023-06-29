@@ -1,4 +1,4 @@
-const { Producto } = require('../db');
+const { Producto } = require('../db.js');
 
 const productValidations = require('../validations/productValidations');
 // Controlador para obtener todos los productos
@@ -27,6 +27,7 @@ async function obtenerProductos(req, res) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al obtener la lista de productos' });
   }
+
 }
 
 // Controlador para crear un nuevo producto
@@ -46,14 +47,14 @@ const crearProducto = async (req, res) => {
       fotosecund,
       categoria
     });
-    productValidations.validateNombreProducto(nombreproducto);
-    productValidations.validateDescProducto(descproducto);
-    productValidations.validateColorProducto(colorproducto);
-    productValidations.validateFotoPrinc(fotoprinc);
-    productValidations.validatePrecioProducto(precioproducto);
-    productValidations.validateDisponibProducto(disponibproducto);
-    productValidations.validateFotoSecund(fotosecund);
-    productValidations.validateCategoria(categoria);
+     productValidations.validateNombreProducto({nombreproducto});
+     productValidations.validateDescProducto({descproducto});
+     productValidations.validateColorProducto({colorproducto});
+     productValidations.validateFotoPrinc({fotoprinc});
+     productValidations.validatePrecioProducto({precioproducto});
+     productValidations.validateDisponibProducto({disponibproducto});
+     productValidations.validateFotoSecund({fotosecund});
+     productValidations.validateCategoria({categoria});
 
     res.status(201).json(newProduct);
   } catch (error) {
@@ -68,7 +69,6 @@ async function obtenerProductoPorId(req, res) {
 
   try {
     const producto = await Producto.findByPk(id);
-
     if (!producto) {
       return res.status(404).json({ mensaje: 'Producto no encontrado' });
     }
@@ -101,15 +101,14 @@ async function actualizarProducto(req, res) {
     producto.fotosecund = fotosecund;
     producto.categoria = categoria;
 
-    productValidations.validateNombreProducto(nombreproducto);
-    productValidations.validateDescProducto(descproducto);
-    productValidations.validateColorProducto(colorproducto);
-    productValidations.validateFotoPrinc(fotoprinc);
-    productValidations.validatePrecioProducto(precioproducto);
-    productValidations.validateDisponibProducto(disponibproducto);
-    productValidations.validateFotoSecund(fotosecund);
-    productValidations.validateCategoria(categoria);
-
+    productValidations.validateNombreProducto({nombreproducto});
+    productValidations.validateDescProducto({descproducto});
+    productValidations.validateColorProducto({colorproducto});
+    productValidations.validateFotoPrinc({fotoprinc});
+    productValidations.validatePrecioProducto({precioproducto});
+    productValidations.validateDisponibProducto({disponibproducto});
+    productValidations.validateFotoSecund({fotosecund});
+    productValidations.validateCategoria({categoria});
 
     await producto.save();
 
@@ -140,7 +139,8 @@ async function eliminarProducto(req, res) {
   }
 }
 
-module.exports = {
+module.exports =  
+ {  
   obtenerProductos,
   crearProducto,
   obtenerProductoPorId,

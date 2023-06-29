@@ -9,7 +9,13 @@ module.exports = (sequelize) => {
     precioproducto: { type: DataTypes.STRING, allowNull: true },
     disponibproducto: { type: DataTypes.STRING, allowNull: true },
     fotosecund: { type: DataTypes.STRING, allowNull: true },
-    categoria: { type: DataTypes.STRING, allowNull: true },
-    borrador: { type: DataTypes.BOOLEAN,  allowNull: true, defaultValue: false },    
+    categoria: { type: DataTypes.STRING, allowNull: false},
+    borrador: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    
   });
+  return Producto;
 };

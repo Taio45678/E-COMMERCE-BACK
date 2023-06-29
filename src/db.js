@@ -2,15 +2,7 @@ require("dotenv").config();
 const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
-const { DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME, DB_URL } = process.env;
-const UsuarioModel = require('./models/Usuario.js');
-//const AdministradorModel = require('./models/Administrador');
-const ProductoModel = require('./models/Producto.js');
-const CategoriaModel = require('./models/Categorias.js');
-const CarritoCompraModel = require('./models/Carrocompra.js');
-const OrdenCompraModel = require('./models/Ordencompra.js');
-const ReviewModel = require('./models/Review.js');
-const FotoProdModel = require('./models/Fotoprod.js');
+const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 let sequelize =
   process.env.NODE_ENV === "production"
@@ -41,56 +33,53 @@ let sequelize =
       { logging: false, native: false }
     );
 
+ const basename = path.basename(__filename);
+ const modelDefiners = [];
 
-
-// Definir las relaciones entre los modelos
-const initializeRelations = () => {
-  const { Usuario, Producto, Carrocompra, Ordencompra, Review, Categoria } = sequelize.models;
-
-  // Relaciones del modelo Usuario
-  Usuario.hasOne(Carrocompra);
-  Usuario.hasMany(Ordencompra);
-  Usuario.hasMany(Review);
-
-  // Relaciones del modelo CarritoCompra
-  Carrocompra.belongsTo(Usuario);
-  Carrocompra.belongsToMany(Producto, { through: 'CarritoProducto' });
-
-  // Relaciones del modelo OrdenCompra
-  Ordencompra.belongsTo(Usuario);
-  Ordencompra.belongsToMany(Producto, { through: 'OrdenProducto' });
-
-  // Relaciones del modelo Producto
-  Producto.belongsToMany(Carrocompra, { through: 'CarritoProducto' });
-  Producto.belongsToMany(Ordencompra, { through: 'OrdenProducto' });
-  Producto.hasMany(Review);
-  Producto.belongsTo(Categoria);
-
-  // Relaciones del modelo Review
-  Review.belongsTo(Producto);
-  Review.belongsTo(Usuario);
-
-  // Resto de relaciones...
-};
-
-// Sincronizar los modelos con la base de datos y establecer las relaciones
-sequelize.sync({ force: false })
-  .then(() => {
-    console.log('Tablas sincronizadas correctamente');
-    initializeRelations();
-    // Aquí puedes continuar con el resto de tu lógica de la aplicación
-  })
-  .catch(error => {
-    console.error('Error al sincronizar las tablas:', error);
+fs.readdirSync(path.join(__dirname, '/models'))
+  .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    modelDefiners.push(require(path.join(__dirname, '/models', file)));
   });
 
-// Exportar los modelos y Sequelize
-module.exports = {
-  Usuario: UsuarioModel,
-  Producto: ProductoModel,
-  Carrocompra: CarritoCompraModel,
-  OrdenCompra: OrdenCompraModel,
-  Review: ReviewModel,
-  Categoria: CategoriaModel,
-  sequelize,
-};
+  modelDefiners.forEach(model => model(sequelize));
+
+let entries = Object.entries(sequelize.models);
+let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].slice(1), entry[1]]);
+
+// Define las relaciones entre los modelos
+sequelize.models = Object.fromEntries(capsEntries);
+
+  const { Carrocompra, Categoria, Ordencompra, Usuario, Producto, Fotoprod, Review } = sequelize.models;
+
+  Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+  Usuario.hasOne(Carrocompra, { foreignKey: 'idusuario' });
+
+  Carrocompra.belongsToMany(Producto, { through: 'prodxcarro', foreignKey: 'idcarrocompra' });
+  Producto.belongsToMany(Carrocompra, { through: 'prodxcarro', foreignKey: 'idproducto' });
+
+  Ordencompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
+  Usuario.hasMany(Ordencompra, { foreignKey: 'idusuario' });
+
+  Ordencompra.belongsToMany(Producto, { through: 'prodxoc', foreignKey: 'idordencompra' });
+  Producto.belongsToMany(Ordencompra, { through: 'prodxoc', foreignKey: 'idproducto' });
+
+  Producto.hasMany(Review, { foreignKey: 'productoId' });
+  Review.belongsTo(Producto, { foreignKey: 'productoId' });
+
+  Producto.hasMany(Fotoprod, { foreignKey: 'idproducto' });
+  Fotoprod.belongsTo(Producto, { foreignKey: 'idproducto' });
+
+
+// Sincroniza los modelos con la base de datos y establece las relaciones
+// sequelize.sync({ force: false })
+//   .then(() => {
+//     console.log('Tablas sincronizadas correctamente');
+//     initializeRelations();
+//     // Aquí puedes continuar con el resto de tu lógica de la aplicación
+//   })
+//   .catch(error => {
+//     console.error('Error al sincronizar las tablas:', error);
+//   });
+
+module.exports = {...sequelize.models, conn: sequelize,};
