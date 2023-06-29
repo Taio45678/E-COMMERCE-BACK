@@ -3,29 +3,28 @@ const { Router } = require('express');
 const { crearProducto, obtenerProductos,obtenerProductoPorId,actualizarProducto,eliminarProducto }  = require('../controllers/productController.js');
 const { obtenerCarritoCompra,agregarProductoCarrito,eliminarProductoCarrito } = require('../controllers/carritoController.js');
 const { obtenerCategorias, crearCategoria, obtenerCategoriaPorId, actualizarCategoria, eliminarCategoria } = require('../controllers/categoriaController.js');
-
+const {autenticacionMiddleware} = require('../middlewares/authToken.js');
 const router = Router();
 
 // Rutas de productos
- router.get('/producto', obtenerProductos);
- router.post('/productoCrear', crearProducto);
- router.get('/producto/:id', obtenerProductoPorId);
- router.put('/producto/:id', actualizarProducto);
- router.delete('/producto/:id', eliminarProducto);
+ // Rutas relacionadas a productos
+router.get('/producto', obtenerProductos);
+router.post('/productoCrear', autenticacionMiddleware, crearProducto);
+router.get('/producto/:id', obtenerProductoPorId);
+router.put('/producto/:id', autenticacionMiddleware, actualizarProducto);
+router.delete('/producto/:id', autenticacionMiddleware, eliminarProducto);
 
- //carrito
- //**felipostre */
- router.get('/usuarios/:idUsuario/carrito', obtenerCarritoCompra);
- router.post('/usuarios/:idUsuario/carritoCrear', agregarProductoCarrito); 
- router.delete('/usuarios/:idUsuario/carrito/:idProducto', eliminarProductoCarrito);
+// Rutas relacionadas al carrito de compra
+router.get('/usuarios/:idUsuario/carrito', autenticacionMiddleware, obtenerCarritoCompra);
+router.post('/usuarios/:idUsuario/carritoCrear', autenticacionMiddleware, agregarProductoCarrito); 
+router.delete('/usuarios/:idUsuario/carrito/:idProducto', autenticacionMiddleware, eliminarProductoCarrito);
 
- //categorias 
-
+// Rutas relacionadas a categorías
 router.get('/categorias', obtenerCategorias);
-router.post('/categoriasCrear', crearCategoria);
+router.post('/categoriasCrear', autenticacionMiddleware, crearCategoria);
 router.get('/categorias/:id', obtenerCategoriaPorId);
-router.put('/categorias/:id', actualizarCategoria);
-router.delete('/categorias/:id', eliminarCategoria);
+router.put('/categorias/:id', autenticacionMiddleware, actualizarCategoria);
+router.delete('/categorias/:id', autenticacionMiddleware, eliminarCategoria);
 
 // Rutas de usuarios
 //router.use(usuarioRoutes);
