@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const usuarioController = require('../controllers/userController.js');
-const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController');
-const { validarRegistro, validarInicioSesion} = require('../middlewares/validaciones');
-const autenticacionMiddleware = require('../middlewares/autenticacionMiddleware');
+const { validarRegistro, validarInicioSesion,registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController');
+
+const autenticacionMiddleware = require('../middlewares/userAuth.js');
 
 // Ruta para el registro de un nuevo usuario
 router.post('/registro', validarRegistro, registroUsuario);
