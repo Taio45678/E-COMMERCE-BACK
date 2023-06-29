@@ -12,9 +12,9 @@ router.post('/registro', validarContrasenaRegistro, registroUsuario);
 router.post('/login', validarInicioSesion, iniciarSesion);
 
 // Ruta protegida que requiere autenticación
-router.get('/usuario', autenticacionMiddleware, usuarioController);
+router.get('/usuario', /*autenticacionMiddleware,*/ usuarioController);
 
 // Ruta para cambiar la contraseña del usuario (también requiere autenticación)
-router.put('/usuario/cambiar-contraseña', autenticacionMiddleware, validarContrasena, cambiarContraseña);
+router.put('/usuario/cambiar-contraseña', /*autenticacionMiddleware,*/ validarContrasena, cambiarContraseña);
 
 module.exports = router;

@@ -1,13 +1,15 @@
-const { CarroCompra, Usuario, Producto } = require('../db');
+const { Carrocompra}= require('../db');
+ const {Usuario}= require('../db');
+ const {Producto} = require('../db');
 
 // Controlador para obtener el carrito de compra de un usuario
 async function obtenerCarritoCompra(req, res) {
-  const { idUsuario } = req.params;
+  const { idusuario } = req.params;
 
   try {
-    const carrito = await CarroCompra.findAll({
+    const carrito = await Carrocompra.findAll({
       where: {
-        idusuario: idUsuario
+        idusuario: idusuario
       },
       include: [
         {
@@ -30,14 +32,14 @@ async function obtenerCarritoCompra(req, res) {
 
 // Controlador para agregar un producto al carrito de compra
 async function agregarProductoCarrito(req, res) {
-  const { idUsuario, idProducto } = req.body;
+  const { idusuario, idproducto } = req.body;
 
   try {
     // Verificar si el producto ya existe en el carrito
-    const productoExistente = await CarroCompra.findOne({
+    const productoExistente = await Carrocompra.findOne({
       where: {
-        idusuario: idUsuario,
-        idproducto: idProducto
+        idusuario: idusuario,
+        idproducto: idproducto
       }
     });
 
@@ -45,9 +47,9 @@ async function agregarProductoCarrito(req, res) {
       return res.status(400).json({ mensaje: 'El producto ya está en el carrito' });
     }
 
-    const nuevoProducto = await CarroCompra.create({
-      idusuario: idUsuario,
-      idproducto: idProducto
+    const nuevoProducto = await Carrocompra.create({
+      idusuario: idusuario,
+      idproducto: idproducto
     });
 
     res.status(201).json(nuevoProducto);
@@ -62,7 +64,7 @@ async function eliminarProductoCarrito(req, res) {
   const { id } = req.params;
 
   try {
-    const producto = await CarroCompra.findByPk(id);
+    const producto = await Carrocompra.findByPk(id);
 
     if (!producto) {
       return res.status(404).json({ mensaje: 'Producto del carrito no encontrado' });
