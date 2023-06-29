@@ -3,7 +3,7 @@ const { Router } = require('express');
 const { crearProducto, obtenerProductos,obtenerProductoPorId,actualizarProducto,eliminarProducto }  = require('../controllers/productController.js');
 const { obtenerCarritoCompra,agregarProductoCarrito,eliminarProductoCarrito } = require('../controllers/carritoController.js');
 const { obtenerCategorias, crearCategoria, obtenerCategoriaPorId, actualizarCategoria, eliminarCategoria } = require('../controllers/categoriaController.js');
-const {autenticacionMiddleware} = require('../middlewares/authToken.js');
+const autenticacionMiddleware = require('../middlewares/authToken.js');
 const router = Router();
 
 // Rutas de productos
