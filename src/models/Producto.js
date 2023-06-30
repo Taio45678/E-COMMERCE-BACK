@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
       defaultValue: [], 
     },
     borrador: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
-    categoriaId: { type: DataTypes.INTEGER, allowNull: false },
+    
   });
 
   Producto.associate = (models) => {

@@ -4,15 +4,13 @@ const fs = require("fs");
 const path = require("path");
 const { DB_USER, DB_PASSWORD, DB_HOST,DB_NAME,DB_URL,DB_PORT } = process.env;
 
-
-
 let sequelize =
   process.env.NODE_ENV === "production"
     ? new Sequelize({
       database: DB_NAME,
       dialect: "postgres",
       host: DB_HOST,
-      port: 5432,
+      port: DB_PORT,
       username: DB_USER,
       password: DB_PASSWORD,
       pool: {
@@ -31,7 +29,7 @@ let sequelize =
       ssl: true,
     })
     : new Sequelize(
-      `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
+      `${DB_URL}`,
       { logging: false, native: false }
     );
 
@@ -71,7 +69,7 @@ sequelize.models = Object.fromEntries(capsEntries);
 
   Producto.hasMany(Fotoprod, { foreignKey: 'idproducto' });
   Fotoprod.belongsTo(Producto, { foreignKey: 'idproducto' });
-  
+  Producto.belongsTo(Categoria, { foreignKey: 'categoriaId', allowNull: false });
 
 
 // Sincroniza los modelos con la base de datos y establece las relaciones

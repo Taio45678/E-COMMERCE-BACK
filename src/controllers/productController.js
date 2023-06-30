@@ -36,13 +36,13 @@ const crearProducto = async (req, res) => {
     const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, nombrecat } = req.body;
 
     // Validaciones de los datos del producto
-    productValidations.validateNombreProducto({ nombreproducto });
+   /* productValidations.validateNombreProducto({ nombreproducto });
     productValidations.validateDescProducto({ descproducto });
     productValidations.validateColorProducto({ colorproducto });
     productValidations.validateFotoPrinc({ fotoprinc });
     productValidations.validatePrecioProducto({ precioproducto });
     productValidations.validateDisponibProducto({ disponibproducto });
-    productValidations.validateFotoSecund({ fotosecund });
+    productValidations.validateFotoSecund({ fotosecund });*/
 
     let categoria = await Categoria.findOne({
       where: {
@@ -114,13 +114,13 @@ async function actualizarProducto(req, res) {
     producto.fotosecund = fotosecund;
     
 
-    productValidations.validateNombreProducto({nombreproducto});
+    /*productValidations.validateNombreProducto({nombreproducto});
     productValidations.validateDescProducto({descproducto});
     productValidations.validateColorProducto({colorproducto});
     productValidations.validateFotoPrinc({fotoprinc});
     productValidations.validatePrecioProducto({precioproducto});
     productValidations.validateDisponibProducto({disponibproducto});
-    productValidations.validateFotoSecund({fotosecund});
+    productValidations.validateFotoSecund({fotosecund});*/
     
 
     await producto.save();
