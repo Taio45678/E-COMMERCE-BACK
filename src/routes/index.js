@@ -3,11 +3,13 @@ const { Router } = require('express');
 const { crearProducto, obtenerProductos,obtenerProductoPorId,actualizarProducto,eliminarProducto }  = require('../controllers/productController.js');
 const { obtenerCarritoCompra,agregarProductoCarrito,eliminarProductoCarrito } = require('../controllers/carritoController.js');
 const { obtenerCategorias, crearCategoria, obtenerCategoriaPorId, actualizarCategoria, eliminarCategoria } = require('../controllers/categoriaController.js');
+const buscarProductos = require('../controllers/searchBarController.js');
 //const autenticacionMiddleware = require('../middlewares/authToken.js');
 const router = Router();
 
 // Rutas de productos
  // Rutas relacionadas a productos
+ router.get('/producto/buscar',buscarProductos);
 router.get('/producto', obtenerProductos);
 router.post('/productoCrear', /*autenticacionMiddleware,*/ crearProducto);
 router.get('/producto/:id', obtenerProductoPorId);
