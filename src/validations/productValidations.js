@@ -34,9 +34,18 @@ function validateDisponibProducto(producto) {
 }
 
 function validateFotoSecund(producto) {
-  // if (!producto.fotosecund) {  throw new Error('La foto secundaria del producto es requerida');  }
-  // if (!Array.isArray(producto.fotosecund)) {  throw new Error('La foto secundaria del producto debe ser un arreglo');  }
-  // proximamente agregar validaciones de url
+  if (producto.fotosecund && !Array.isArray(producto.fotosecund)) {
+    throw new Error('El campo "fotosecund" debe ser un arreglo de URLs');
+  }
+
+  if (producto.fotosecund) {
+    producto.fotosecund.forEach((url) => {
+      if (typeof url !== 'string') {
+        throw new Error('Cada elemento del campo "fotosecund" debe ser una URL válida');
+      }
+      
+    });
+  }
 }
 
 function validateCategoria(producto) {
