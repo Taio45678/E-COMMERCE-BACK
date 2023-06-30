@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
       allowNull: true
     },
     precioproducto: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: true,
       validate: {
         isDecimal: {
