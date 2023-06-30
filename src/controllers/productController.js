@@ -38,19 +38,17 @@ const crearProducto = async (req, res) => {
     // Validaciones de los datos del producto
     
 
-  if (nombrecat) {
-  let categoria = await Categoria.findOne({
-    where: {
-      nombrecat: nombrecat.toLowerCase()
-    }
-  });
-
-  if (!categoria) {
-    categoria = await Categoria.create({
-      nombrecat: nombrecat.toLowerCase(),
+    let categoria = await Categoria.findOne({
+      where: {
+        nombrecat: nombrecat.toLowerCase()
+      }
     });
-  }
-}
+
+    if (!categoria) {
+      categoria = await Categoria.create({
+        nombrecat: nombrecat.toLowerCase(),
+      });
+    }
 
     const newProduct = await Producto.create({
       id,
