@@ -74,9 +74,9 @@ module.exports = {
   validateNombreProducto,
   validateDescProducto,
   validateColorProducto,
-  validateFotoPrinc,
+ // validateFotoPrinc,
   validatePrecioProducto,
-  validateDisponibProducto,
+ // validateDisponibProducto,
   validateFotoSecund,
   validateCategoria,
 };
