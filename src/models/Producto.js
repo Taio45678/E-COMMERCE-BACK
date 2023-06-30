@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+
 module.exports = (sequelize) => {
   const Producto = sequelize.define('producto', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -9,7 +10,12 @@ module.exports = (sequelize) => {
     precioproducto: { type: DataTypes.STRING, allowNull: true },
     disponibproducto: { type: DataTypes.STRING, allowNull: true },
     fotosecund: { type: DataTypes.STRING, allowNull: true },
-    categoria: { type: DataTypes.STRING, allowNull: true },
-    borrador: { type: DataTypes.BOOLEAN,  allowNull: true, defaultValue: false },    
+    borrador: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
   });
+
+  Producto.associate = (models) => {
+    Producto.belongsTo(models.Categoria, { foreignKey: 'categoriaId', allowNull: false });
+  };
+
+  return Producto;
 };

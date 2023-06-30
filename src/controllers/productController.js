@@ -1,4 +1,4 @@
-const { Producto } = require('../db.js');
+const { Producto, Categoria} = require('../db.js');
 
 const productValidations = require('../validations/productValidations');
 // Controlador para obtener todos los productos
@@ -33,9 +33,29 @@ async function obtenerProductos(req, res) {
 // Controlador para crear un nuevo producto
 const crearProducto = async (req, res) => {
   try {
-    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categoria } = req.body;
-    
-    // Lógica para crear un nuevo producto en la base de datos
+    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, nombrecat } = req.body;
+
+    // Validaciones de los datos del producto
+    productValidations.validateNombreProducto(nombreproducto);
+    productValidations.validateDescProducto(descproducto);
+    productValidations.validateColorProducto(colorproducto);
+    productValidations.validateFotoPrinc(fotoprinc);
+    productValidations.validatePrecioProducto(precioproducto);
+    productValidations.validateDisponibProducto(disponibproducto);
+    productValidations.validateFotoSecund(fotosecund);
+
+    let categoria = await Categoria.findOne({
+      where: {
+        nombrecat: nombrecat.toLowerCase()
+      }
+    });
+
+    if (!categoria) {
+      categoria = await Categoria.create({
+        nombrecat: nombrecat.toLowerCase(),
+      });
+    }
+
     const newProduct = await Producto.create({
       id,
       nombreproducto,
@@ -45,16 +65,8 @@ const crearProducto = async (req, res) => {
       precioproducto,
       disponibproducto,
       fotosecund,
-      categoria
+      categoriaId: categoria.id
     });
-     productValidations.validateNombreProducto({nombreproducto});
-     productValidations.validateDescProducto({descproducto});
-     productValidations.validateColorProducto({colorproducto});
-     productValidations.validateFotoPrinc({fotoprinc});
-     productValidations.validatePrecioProducto({precioproducto});
-     productValidations.validateDisponibProducto({disponibproducto});
-     productValidations.validateFotoSecund({fotosecund});
-     productValidations.validateCategoria({categoria});
 
     res.status(201).json(newProduct);
   } catch (error) {
@@ -62,6 +74,7 @@ const crearProducto = async (req, res) => {
     res.status(500).json({ error: 'Error al crear un nuevo producto' });
   }
 };
+
 
 // Controlador para obtener un producto por su ID
 async function obtenerProductoPorId(req, res) {
@@ -99,7 +112,7 @@ async function actualizarProducto(req, res) {
     producto.precioproducto = precioproducto;
     producto.disponibproducto = disponibproducto;
     producto.fotosecund = fotosecund;
-    producto.categoria = categoria;
+    
 
     productValidations.validateNombreProducto({nombreproducto});
     productValidations.validateDescProducto({descproducto});
@@ -108,7 +121,7 @@ async function actualizarProducto(req, res) {
     productValidations.validatePrecioProducto({precioproducto});
     productValidations.validateDisponibProducto({disponibproducto});
     productValidations.validateFotoSecund({fotosecund});
-    productValidations.validateCategoria({categoria});
+    
 
     await producto.save();
 
