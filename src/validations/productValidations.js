@@ -30,11 +30,11 @@ function validateColorProducto(producto) {
   });
 }
 
-function validateFotoPrinc(producto) {
+/*function validateFotoPrinc(producto) {
   if (!producto.fotoprinc) { throw new Error('La foto principal del producto es requerida');  }
   if (typeof producto.fotoprinc !== 'string') {  throw new Error('La foto principal del producto debe ser una cadena de caracteres'); }
   // Puedes agregar validaciones adicionales para la URL de la foto principal si lo deseas
-}
+}*/
 
 function validatePrecioProducto(producto) {
   if (!producto.precioproducto) {  throw new Error('El precio del producto es requerido'); }
@@ -42,10 +42,10 @@ function validatePrecioProducto(producto) {
   if (producto.precioproducto <= 0) {   throw new Error('El precio del producto debe ser mayor que cero');  }
 }
 
-function validateDisponibProducto(producto) {  
+/*function validateDisponibProducto(producto) {  
   if (!producto.disponibproducto) {   throw new Error('La disponibilidad del producto es requerida');  }
-  if (typeof producto.disponibproducto !== 'boolean') {   throw new Error('La disponibilidad del producto debe ser un valor booleano');  }
-}
+  if (typeof producto.disponibproducto !== 'integer') {   throw new Error('La disponibilidad del producto debe ser un valor booleano');  }
+}*/
 
 function validateFotoSecund(producto) {
   if (producto.fotosecund && !Array.isArray(producto.fotosecund)) {
