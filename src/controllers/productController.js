@@ -39,9 +39,9 @@ const crearProducto = async (req, res) => {
     productValidations.validateNombreProducto({ nombreproducto });
     productValidations.validateDescProducto({ descproducto });
     productValidations.validateColorProducto({ colorproducto });
-    productValidations.validateFotoPrinc({ fotoprinc });
+   // productValidations.validateFotoPrinc({ fotoprinc });
     productValidations.validatePrecioProducto({ precioproducto });
-    productValidations.validateDisponibProducto({ disponibproducto });
+   // productValidations.validateDisponibProducto({ disponibproducto });
     productValidations.validateFotoSecund({ fotosecund });
 
     let categoria = await Categoria.findOne({
@@ -117,9 +117,9 @@ async function actualizarProducto(req, res) {
     productValidations.validateNombreProducto({nombreproducto});
     productValidations.validateDescProducto({descproducto});
     productValidations.validateColorProducto({colorproducto});
-    productValidations.validateFotoPrinc({fotoprinc});
+   // productValidations.validateFotoPrinc({fotoprinc});
     productValidations.validatePrecioProducto({precioproducto});
-    productValidations.validateDisponibProducto({disponibproducto});
+   // productValidations.validateDisponibProducto({disponibproducto});
     productValidations.validateFotoSecund({fotosecund});
     
 
