@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 
-
 module.exports = (sequelize) => {
   const Producto = sequelize.define('producto', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -16,7 +15,6 @@ module.exports = (sequelize) => {
       defaultValue: [], 
     },
     borrador: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
-    categoriaId: { type: DataTypes.INTEGER, allowNull: false },
   });
 
   Producto.associate = (models) => {
