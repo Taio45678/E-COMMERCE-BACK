@@ -57,7 +57,7 @@ const crearProducto = async (req, res) => {
     }
 
     const newProduct = await Producto.create({
-      
+      id,
       nombreproducto,
       descproducto,
       colorproducto,
