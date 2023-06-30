@@ -11,9 +11,23 @@ function validateDescProducto(producto) {
 }
 
 function validateColorProducto(producto) {
-  if (!producto.colorproducto) { throw new Error('El color del producto es requerido');  }
-  if (typeof producto.colorproducto !== 'string') {    throw new Error('El color del producto debe ser una cadena de caracteres');  }
-  if (producto.colorproducto.length < 3 || producto.colorproducto.length > 50) {  throw new Error('El color del producto debe tener entre 3 y 50 caracteres');  }
+  if (!producto.colorproducto) {
+    throw new Error('El color del producto es requerido');
+  }
+  if (!Array.isArray(producto.colorproducto)) {
+    throw new Error('El color del producto debe ser un arreglo');
+  }
+  if (producto.colorproducto.length === 0) {
+    throw new Error('El color del producto debe contener al menos un valor');
+  }
+  producto.colorproducto.forEach(color => {
+    if (typeof color !== 'string') {
+      throw new Error('Cada elemento del arreglo de colores debe ser una cadena de caracteres');
+    }
+    if (color.length < 3 || color.length > 50) {
+      throw new Error('Cada color del producto debe tener entre 3 y 50 caracteres');
+    }
+  });
 }
 
 function validateFotoPrinc(producto) {
