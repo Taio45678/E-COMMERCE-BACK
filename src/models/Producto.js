@@ -15,6 +15,7 @@ module.exports = (sequelize) => {
       defaultValue: [], 
     },
     borrador: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
+    
   });
 
   Producto.associate = (models) => {
