@@ -2,25 +2,25 @@ const { Producto, Categoria } = require('../db.js');
 
 const buscarProductos = async (req, res) => {
   try {
-    const { PRODUCTO, CATEGORIA } = req.query;
+    const { producto, categoria } = req.query;
     let whereCondition = {};
 
-    if (PRODUCTO) {
+    if (producto) {
       whereCondition[Op.or] = [
-        { nombreproducto: { [Op.iLike]: `%${PRODUCTO}%` } },
-        { descproducto: { [Op.iLike]: `%${PRODUCTO}%` } },
-        { colorproducto: { [Op.iLike]: `%${PRODUCTO}%` } },
+        { nombreproducto: { [Op.iLike]: `%${producto}%` } },
+        { descproducto: { [Op.iLike]: `%${producto}%` } },
+        { colorproducto: { [Op.iLike]: `%${producto}%` } },
       ];
     }
 
-    if (CATEGORIA) {
-      whereCondition.categoria = CATEGORIA.toLowerCase();
+    if (categoria) {
+      whereCondition.categoria = categoria.toLowerCase();
     }
 
-   
+    // Lógica para buscar productos en la base de datos
     const productos = await Producto.findAll({
       where: whereCondition,
-      include: [Categoria] 
+      include: [Categoria] // Incluir la asociación con el modelo de Categoria
     });
 
     res.json(productos);
