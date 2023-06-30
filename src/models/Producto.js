@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
   const Producto = sequelize.define('producto', {
@@ -8,13 +9,14 @@ module.exports = (sequelize) => {
     colorproducto: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: true },
     fotoprinc: { type: DataTypes.STRING, allowNull: true },
     precioproducto: { type: DataTypes.STRING, allowNull: true },
-    disponibproducto: { type: DataTypes.STRING, allowNull: true },
+    disponibproducto: { type: DataTypes.INTEGER, allowNull: true },
     fotosecund: {
       type: DataTypes.ARRAY(DataTypes.STRING), 
       allowNull: true, 
       defaultValue: [], 
     },
     borrador: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
+    categoriaId: { type: DataTypes.INTEGER, allowNull: false },
   });
 
   Producto.associate = (models) => {
