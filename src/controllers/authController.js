@@ -1,7 +1,6 @@
-const { Usuario } = require('../db');
+const Usuario  = require('../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
 
 async function crearNuevoUsuario(login, username, hashedPassword, telefono, direccion) {
   try {
@@ -10,8 +9,7 @@ async function crearNuevoUsuario(login, username, hashedPassword, telefono, dire
       username: username,
       password: hashedPassword,
       telefono: telefono,
-      direccion: direccion,
-      rol: 2
+      direccion: direccion
     });
 
     return usuario;

@@ -4,10 +4,6 @@ const { crearProducto, obtenerProductos,obtenerProductoPorId,actualizarProducto,
 const { obtenerCarritoCompra,agregarProductoCarrito,eliminarProductoCarrito } = require('../controllers/carritoController.js');
 const { obtenerCategorias, crearCategoria, obtenerCategoriaPorId, actualizarCategoria, eliminarCategoria } = require('../controllers/categoriaController.js');
 const buscarProductos = require('../controllers/searchBarController.js');
-const express = require('express');
-
-    const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController.js');
-
 //const autenticacionMiddleware = require('../middlewares/authToken.js');
 const router = Router();
 
@@ -24,11 +20,6 @@ router.delete('/producto/:id', /*autenticacionMiddleware,*/ eliminarProducto);
 router.get('/usuarios/:idUsuario/carrito', /*autenticacionMiddleware,*/ obtenerCarritoCompra);
 router.post('/usuarios/:idUsuario/carritoCrear', /*autenticacionMiddleware,*/ agregarProductoCarrito); 
 router.delete('/usuarios/:idUsuario/carrito/:idProducto', /*autenticacionMiddleware,*/ eliminarProductoCarrito);
-//usuarios
-
-router.post('/registro', registroUsuario);
-router.post('/login', iniciarSesion);
-router.post('/cambiar-contraseña', cambiarContraseña);
 
 // Rutas relacionadas a categorías
 router.get('/categorias', obtenerCategorias);
