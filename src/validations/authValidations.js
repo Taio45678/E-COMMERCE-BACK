@@ -1,8 +1,7 @@
 const { body, validationResult } = require('express-validator');
 const joi = require('joi');
 
-const { body, validationResult } = require('express-validator');
-const joi = require('joi');
+
 
 const validarContrasenaRegistro = [
   body('username').notEmpty().withMessage('El nombre es obligatorio'),
@@ -34,7 +33,7 @@ const validarContrasenaRegistro = [
   }
 ];
 
-module.exports = { validarContrasenaRegistro };
+
 
 
 const validarInicioSesion = [
@@ -49,4 +48,4 @@ const validarInicioSesion = [
   }
 ];
 
-module.exports = { validarContrasena, validarRegistro, validarInicioSesion };
+module.exports = { validarContrasenaRegistro,  validarInicioSesion };

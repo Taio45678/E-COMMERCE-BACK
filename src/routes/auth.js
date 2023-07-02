@@ -15,6 +15,6 @@ router.post('/login', validarInicioSesion, iniciarSesion);
 router.get('/usuario', /*autenticacionMiddleware,*/ usuarioController);
 
 // Ruta para cambiar la contraseña del usuario (también requiere autenticación)
-router.put('/usuario/cambiar-contraseña', /*autenticacionMiddleware,*/ validarContrasena, cambiarContraseña);
+router.put('/usuario/cambiar-contraseña', /*autenticacionMiddleware,*/ validarContrasenaRegistro, cambiarContraseña);
 
 module.exports = router;
