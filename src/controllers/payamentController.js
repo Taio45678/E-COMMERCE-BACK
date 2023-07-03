@@ -44,7 +44,7 @@ const createPaymentPreference = async (req, res) => {
       notification_url: "https://commerce-back-2025.up.railway.app/payment-notification",
       external_reference: client_id.toString(),
       back_urls: {
-        success: "https://commerce-back-2025.up.railway.app//success",
+        success: "https://commerce-back-2025.up.railway.app/success",
         pending: "https://commerce-back-2025.up.railway.app/pending",
         failure: "https://commerce-back-2025.up.railway.app/failure",
       },
