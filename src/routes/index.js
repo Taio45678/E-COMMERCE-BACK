@@ -26,7 +26,7 @@ const {
 
 const buscarProductos = require('../controllers/searchBarController.js');
 const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController.js');
-const usuarioController = require('../controllers/auth0Controller.js');
+const {guardarUsuario} = require('../controllers/auth0Controller.js');
 /*const config = {
     authRequired: false,
     auth0Logout: true,
@@ -56,7 +56,7 @@ router.post('/login', iniciarSesion);
 router.post('/cambiar-contraseña', cambiarContraseña);
 */
 //este es la ruta para auth0 se supone
-router.post('/usuarios', usuarioController.guardarUsuario);
+router.post('/usuarios', guardarUsuario);
 
 //categorias
 router.get('/categorias', obtenerCategorias);
