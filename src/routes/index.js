@@ -2,7 +2,7 @@ const { Router } = require('express');
 require("dotenv").config();
 const { auth } = require('express-openid-connect');
 const {SECRET_KEY,CLIENT_ID,AUTH_URL} = process.env;
-const { createPaymentPreference, handlePaymentNotification, receiveWebhook } = require("../controllers/payamentController2.js")
+const { createPaymentPreference, handlePaymentNotification, receiveWebhook } = require("../controllers/payamentController.js")
 const {
   crearProducto,
   obtenerProductos,
