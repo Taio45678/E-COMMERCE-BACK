@@ -44,4 +44,3 @@ const buscarProductos = async (req, res) => {
 };
 
 module.exports = buscarProductos;
-

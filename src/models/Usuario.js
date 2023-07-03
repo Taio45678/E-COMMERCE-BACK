@@ -7,29 +7,30 @@ module.exports = (sequelize) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    login: {
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    emailVerified: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    nickname: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    picture: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    sub: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
-      validate: {
-        isEmail: true,
-      },
-    },
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    telefono: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    direccion: {
-      type: DataTypes.STRING,
-      allowNull: true,
+      unique: true
     },
     rol: {
       type: DataTypes.INTEGER,
@@ -37,7 +38,7 @@ module.exports = (sequelize) => {
       validate: {
         isIn: [[1, 2]], // 1 para usuario, 2 para admin
       },
-    },
+    }
   });
 
   return Usuario;
