@@ -2,6 +2,7 @@ const { Router } = require('express');
 require("dotenv").config();
 const { auth } = require('express-openid-connect');
 const {SECRET_KEY,CLIENT_ID,AUTH_URL} = process.env;
+const { createPaymentPreference, handlePaymentNotification, receiveWebhook } = require("../controllers/payamentController2.js")
 const {
   crearProducto,
   obtenerProductos,
@@ -64,5 +65,13 @@ router.post('/categoriasCrear',  crearCategoria);
 router.get('/categorias/:id',  obtenerCategoriaPorId);
 router.put('/categorias/:id', actualizarCategoria);
 router.delete('/categorias/:id', eliminarCategoria);
+// Rutas pagos 
+router.post("/create-order", createPaymentPreference);
+
+router.get("/success", (req, res) => res.send("Success"));
+router.get("/pending", (req, res) => res.send("Pending"));
+router.get("/failure", (req, res) => res.send("Failure"));
+
+router.post('/payment-notification', handlePaymentNotification);
 
 module.exports = router;
