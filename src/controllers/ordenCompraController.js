@@ -1,25 +1,26 @@
-const { Oc, Detalleoc, Usuario } = require('../models');
+const { Oc, Detalleoc, Usuario, Producto } = require('../db');
 
 const generarOrdenDeCompra = async (req, res) => {
   try {
-    // Obtener los datos necesarios para la orden de compra
     const { usuarioid, productos } = req.body;
+
+    // Calcular el valor total de la orden de compra
+    const valortotaloc = calcularValorTotal(productos);
 
     // Crear la orden de compra
     const orden = await Oc.create({
-      fechahoraoc: new Date().toISOString(), // Establecer la fecha y hora actual
-      hashvalidacion: 'pending', // Valor por defecto 'pending'
-      usuarioid: usuarioid,
-      valortotaloc: calcularValorTotal(productos), // Función para calcular el valor total de los productos
-      estado: 'pendiente', // Estado inicial de la orden de compra
+      fechahoraoc: new Date().toISOString(),
+      hashvalidacion: 'pending',
+      idusuario: usuarioid,
+      valortotaloc: valortotaloc,
     });
 
     // Crear los detalles de la orden de compra
     const detalles = productos.map((producto) => ({
-      cant: producto.cantidad,
-      subtotal: calcularSubtotal(producto), // Función para calcular el subtotal del producto
       ocId: orden.idoc,
       productoId: producto.id,
+      cant: producto.cantidad,
+      subtotal: producto.subtotalitem,
     }));
 
     // Guardar los detalles de la orden de compra en la base de datos
@@ -38,7 +39,6 @@ const generarOrdenDeCompra = async (req, res) => {
       ],
     });
 
-    // Enviar la respuesta con la orden de compra generada
     res.status(200).json({ orden: ordenCompleta });
   } catch (error) {
     console.error('Error al generar la orden de compra:', error);
@@ -50,14 +50,9 @@ const generarOrdenDeCompra = async (req, res) => {
 const calcularValorTotal = (productos) => {
   let total = 0;
   productos.forEach((producto) => {
-    total += producto.precio * producto.cantidad;
+    total += producto.subtotalitem;
   });
   return total.toFixed(2); // Redondear a 2 decimales
-};
-
-// Función para calcular el subtotal del producto
-const calcularSubtotal = (producto) => {
-  return (producto.precio * producto.cantidad).toFixed(2); // Redondear a 2 decimales
 };
 
 module.exports = {

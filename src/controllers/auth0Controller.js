@@ -1,9 +1,9 @@
 const Usuario = require('../models/Usuario');
 const { login } = require('auth0');
-
+const bcrypt = require('bcrypt');
 const guardarUsuario = async (req, res, next) => {
   try {
-    const { email, email_verified, name, nickname, picture, sub } = req.body;
+    const { email, emailVerified, name, nickname, picture, sub, password } = req.body;
 
     // Verificar si el usuario ya existe en la base de datos
     const usuarioExistente = await Usuario.findOne({ where: { email } });
@@ -16,15 +16,18 @@ const guardarUsuario = async (req, res, next) => {
       return res.status(200).json({ message: 'Inicio de sesión exitoso', accessToken });
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     // Crear un nuevo usuario en la base de datos
     const nuevoUsuario = await Usuario.create({
       email,
-      emailVerified: email_verified,
+      emailVerified,
       name,
       nickname,
       picture,
       sub,
-      rol:2
+      password: hashedPassword,
+      rol: 2
     });
 
     return res.status(201).json({ message: 'Usuario creado exitosamente', usuario: nuevoUsuario });
