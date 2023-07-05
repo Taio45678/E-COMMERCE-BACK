@@ -6,9 +6,9 @@ module.exports = (sequelize) => {
     nombrecat: { type: DataTypes.STRING, allowNull: false },
   });
 
-  Categoria.associate = (models) => {
-    Categoria.hasMany(models.Producto, { foreignKey: 'categoriaId', allowNull: false });
-  };
+  // Categoria.associate = (models) => {
+  //   Categoria.hasMany(models.Producto, { foreignKey: 'categoriaId', allowNull: false });
+  // };
 
   return Categoria;
 };
