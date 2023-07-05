@@ -40,6 +40,9 @@ module.exports = (sequelize) => {
       },
     }
   });
+  Usuario.associate = (models) => {
+    Usuario.hasMany(models.Oc, { foreignKey: 'idusuario', as: 'ordenes' });
+  };
 
   return Usuario;
 };
