@@ -20,6 +20,7 @@ module.exports = (sequelize) => {
 
   Producto.associate = (models) => {
     Producto.belongsTo(models.Categoria, { foreignKey: 'categoriaId', allowNull: false });
+    Producto.hasMany(models.detalleoc, { foreignKey: 'productoId', as: 'detalles' });
   };
 
   return Producto;
