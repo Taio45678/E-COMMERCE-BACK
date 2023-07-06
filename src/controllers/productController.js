@@ -1,5 +1,6 @@
-const { Producto } = require('../db');
+const { Producto, Categoria} = require('../db.js');
 
+const productValidations = require('../validations/productValidations');
 // Controlador para obtener todos los productos
 async function obtenerProductos(req, res) {
   const { page, limit } = req.query;
@@ -26,14 +27,37 @@ async function obtenerProductos(req, res) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al obtener la lista de productos' });
   }
+
 }
 
 // Controlador para crear un nuevo producto
 const crearProducto = async (req, res) => {
   try {
-    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categori } = req.body;
-    
-    // Lógica para crear un nuevo producto en la base de datos
+    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, nombrecat } = req.body;
+
+    // Validaciones de los datos del producto
+
+   /* productValidations.validateNombreProducto({ nombreproducto });
+    productValidations.validateDescProducto({ descproducto });
+    productValidations.validateColorProducto({ colorproducto });
+    productValidations.validateFotoPrinc({ fotoprinc });
+    productValidations.validatePrecioProducto({ precioproducto });
+    productValidations.validateDisponibProducto({ disponibproducto });
+    productValidations.validateFotoSecund({ fotosecund });*/
+
+
+    let categoria = await Categoria.findOne({
+      where: {
+        nombrecat: nombrecat.toLowerCase()
+      }
+    });
+
+    if (!categoria) {
+      categoria = await Categoria.create({
+        nombrecat: nombrecat.toLowerCase(),
+      });
+    }
+
     const newProduct = await Producto.create({
       id,
       nombreproducto,
@@ -43,9 +67,10 @@ const crearProducto = async (req, res) => {
       precioproducto,
       disponibproducto,
       fotosecund,
-      categori
+      
     });
-
+      await newProduct.addCategoria(categoria)
+      console.log(Object.keys(newProduct))
     res.status(201).json(newProduct);
   } catch (error) {
     console.error('Error al crear un nuevo producto:', error);
@@ -53,18 +78,23 @@ const crearProducto = async (req, res) => {
   }
 };
 
+
 // Controlador para obtener un producto por su ID
 async function obtenerProductoPorId(req, res) {
   const { id } = req.params;
 
   try {
-    const producto = await Producto.findByPk(id);
-
-    if (!producto) {
+    const respuesta = await Producto.findByPk(id, {include:
+      {model: Categoria,
+      attributes: ['nombrecat']}});
+    if (!respuesta) {
       return res.status(404).json({ mensaje: 'Producto no encontrado' });
     }
-
+    const {nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria} = respuesta
+    var namecat = categoria[0].nombrecat
+    const producto = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat}
     res.json(producto);
+    console.log(JSON.stringify(producto))
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al obtener el producto' });
@@ -74,7 +104,7 @@ async function obtenerProductoPorId(req, res) {
 // Controlador para actualizar un producto
 async function actualizarProducto(req, res) {
   const { id } = req.params;
-  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categori } = req.body;
+  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categoria } = req.body;
 
   try {
     const producto = await Producto.findByPk(id);
@@ -90,7 +120,19 @@ async function actualizarProducto(req, res) {
     producto.precioproducto = precioproducto;
     producto.disponibproducto = disponibproducto;
     producto.fotosecund = fotosecund;
-    producto.categori = categori;
+    
+
+
+    /*productValidations.validateNombreProducto({nombreproducto});
+    productValidations.validateDescProducto({descproducto});
+    productValidations.validateColorProducto({colorproducto});
+    productValidations.validateFotoPrinc({fotoprinc});
+    productValidations.validatePrecioProducto({precioproducto});
+    productValidations.validateDisponibProducto({disponibproducto});
+    productValidations.validateFotoSecund({fotosecund});*/
+    
+
+   
 
     await producto.save();
 
@@ -121,7 +163,8 @@ async function eliminarProducto(req, res) {
   }
 }
 
-module.exports = {
+module.exports =  
+ {  
   obtenerProductos,
   crearProducto,
   obtenerProductoPorId,

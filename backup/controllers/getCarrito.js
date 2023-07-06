@@ -1,10 +1,10 @@
-const { Carrocompra, Producto } = require('../../E-COMMERCE-BACK/src/db.js');
+const { carrocompra, Producto } = require('../../E-COMMERCE-BACK/src/db.js');
 // ver el carrito
 const verCarroCompra = async (req, res, next) => {
   try {
     const { idusuario } = req.params;
 
-    const productosEnCarro = await Carrocompra.findAll({
+    const productosEnCarro = await carrocompra.findAll({
       where: { idusuario },
       include: { model: Producto,
     attributes: ['nombreproducto','precioproducto','fotoprinc']},
@@ -20,7 +20,7 @@ const eliminarProductoCarro = async (req, res, next) => {
   try {
     const { idcarrocompra } = req.params;
 
-    const resultado = await idcarrocompra.destroy({
+    const resultado = await carrocompra.destroy({
       where: { idcarrocompra },
     });
 
@@ -38,7 +38,7 @@ const agregarProductoCarro = async (req, res, next) => {
   try {
     const { idusuario, idproducto } = req.body;
 
-    const nuevoProductoCarro = await Carrocompra.create({
+    const nuevoProductoCarro = await carrocompra.create({
       idusuario,
       idproducto,
     });

@@ -1,36 +1,27 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  const Usuario = sequelize.define('Usuario', {
+const Usuario=  sequelize.define('usuario', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    emailVerified: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    nickname: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    picture: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    sub: {
+    login: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    username: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     rol: {
       type: DataTypes.INTEGER,
@@ -38,8 +29,8 @@ module.exports = (sequelize) => {
       validate: {
         isIn: [[1, 2]], // 1 para usuario, 2 para admin
       },
-    }
+    },
+    
   });
-
   return Usuario;
 };
