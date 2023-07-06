@@ -23,7 +23,7 @@ const {
   actualizarCategoria,
   eliminarCategoria
 } = require('../controllers/categoriaController.js');
-const { generarOrdenDeCompra, obtenerOrdenDeCompra} = require('../controllers/ordenCompraController');
+const { postOCyDetalle} = require('../controllers/postOcDet.js');
 const buscarProductos = require('../controllers/searchBarController.js');
 const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController.js');
 const {guardarUsuario} = require('../controllers/auth0Controller.js');
@@ -58,8 +58,8 @@ router.post('/cambiar-contraseña', cambiarContraseña);
 //este es la ruta para auth0 se supone
 router.post('/usuarios', guardarUsuario);
 //orden compra
-router.get('/ordencompra/:id', obtenerOrdenDeCompra);
-router.post('/generar-orden', generarOrdenDeCompra);
+
+router.post('/generar-orden', postOCyDetalle);
 //categorias
 router.get('/categorias', obtenerCategorias);
 router.post('/categoriasCrear',  crearCategoria);
