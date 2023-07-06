@@ -1,5 +1,5 @@
 const Usuario = require('../models/Usuario');
-const { login } = require('auth0');
+const  login  = require('auth0');
 const bcrypt = require('bcrypt');
 const guardarUsuario = async (req, res, next) => {
   try {
