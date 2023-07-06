@@ -28,14 +28,14 @@ const {
 const buscarProductos = require('../controllers/searchBarController.js');
 const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController.js');
 const {guardarUsuario} = require('../controllers/auth0Controller.js');
-/*const config = {
+const config = {
     authRequired: false,
     auth0Logout: true,
     secret: `${SECRET_KEY}`,
     baseURL: 'http://localhost:3000',
     clientID: `${CLIENT_ID}`,
     issuerBaseURL: `${AUTH_URL}`
-  };*/
+  };
 
 
 const router = Router();
@@ -47,7 +47,7 @@ router.get('/producto/:id', obtenerProductoPorId);
 router.put('/producto/:id', /*auth(config),*/ actualizarProducto);
 router.delete('/producto/:id', /*auth(config),*/ eliminarProducto);
 
-router.get('/usuarios/:idUsuario/carrito', /*auth(config),*/ obtenerCarritoCompra);
+router.get('/usuarios/:idUsuario/carrito', auth(config), obtenerCarritoCompra);
 router.post('/usuarios/:idUsuario/carritoCrear', /*auth(config),*/ agregarProductoCarrito);
 router.delete('/usuarios/:idUsuario/carrito/:idProducto', /*auth(config),*/ eliminarProductoCarrito);
 
