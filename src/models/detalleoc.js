@@ -1,16 +1,13 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  const Detalleoc = sequelize.define('detalleoc', {
-    iddetalleoc: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true, allowNull: false },
-    cant: { type: DataTypes.STRING, allowNull: true },
-    subtotal: { type: DataTypes.STRING, allowNull: true }
+ sequelize.define('detalleoc', {
+  iddetalleoc: {  type: DataTypes.INTEGER,autoIncrement: true, primaryKey: true,  allowNull: false, },
+  idproducto: { type: DataTypes.INTEGER, allowNull: true, },
+  nombreproducto: { type: DataTypes.STRING, allowNull: true, },
+  valorunitario: { type: DataTypes.INTEGER, allowNull: true,  },
+  cant: { type: DataTypes.INTEGER, allowNull: true,  },
+  subtotal: { type: DataTypes.STRING, allowNull: true,  },
+  idoc: { type: DataTypes.INTEGER, allowNull: true,  }
   });
-
-  Detalleoc.associate = (models) => {
-    Detalleoc.belongsTo(models.oc, { foreignKey: 'ocId', as: 'orden' });
-    Detalleoc.belongsTo(models.producto, { foreignKey: 'productoId', as: 'producto' });
-  };
-
-  return Detalleoc;
 };

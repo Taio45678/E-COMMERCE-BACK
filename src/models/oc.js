@@ -1,21 +1,12 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
- const Oc = sequelize.define('oc', {
+ sequelize.define('oc', {
   idoc: {  type: DataTypes.INTEGER,autoIncrement: true, primaryKey: true,  allowNull: false, },
   fechahoraoc: { type: DataTypes.STRING, allowNull: true, },
-  estado:{type: DataTypes.ENUM('pending', 'failure', 'success'),
-  defaultValue: 'pending',
-  allowNull: false},
-  hashvalidacion: {
-    type: DataTypes.STRING, allowNull: false,
-  }, 
-  idusuario: { type: DataTypes.INTEGER, allowNull: true,  },
-  valortotaloc: { type: DataTypes.STRING, allowNull: true,  },
+  hashvalidacionpago: { type: DataTypes.STRING, allowNull: true, },
+  loginuser: { type: DataTypes.STRING, allowNull: true,  },
+  valortotaloc: { type: DataTypes.INTEGER, allowNull: true,  },
+  estadooc: { type: DataTypes.STRING, allowNull: true,  }
   });
-  Oc.associate = (models) => {
-    Oc.belongsTo(models.Usuario, { foreignKey: 'idusuario', as: 'usuario' });
-    Oc.hasMany(models.detalleoc, { foreignKey: 'ocId', as: 'detalle' });
-  };
-  return Oc;
 };

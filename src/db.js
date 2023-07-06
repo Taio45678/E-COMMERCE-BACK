@@ -66,11 +66,15 @@ sequelize.models = Object.fromEntries(capsEntries);
 
   Producto.hasMany(Review, { foreignKey: 'productoId' });
   Review.belongsTo(Producto, { foreignKey: 'productoId' });
-
+  
   Producto.hasMany(Fotoprod, { foreignKey: 'idproducto' });
   Fotoprod.belongsTo(Producto, { foreignKey: 'idproducto' });
   Producto.belongsTo(Categoria, { foreignKey: 'categoriaId', allowNull: false });
-
+  Detalleoc.belongsTo(Oc, { foreignKey: 'ocId', as: 'orden' });
+  Detalleoc.belongsTo(Producto, { foreignKey: 'productoId', as: 'producto' });
+  Oc.belongsTo(Usuario, { foreignKey: 'idusuario', as: 'usuario' });
+  Oc.hasMany(Detalleoc, { foreignKey: 'ocId', as: 'orden' });
+  Producto.hasMany(Detalleoc, { foreignKey: 'productoId', as: 'producto' });
 
 // Sincroniza los modelos con la base de datos y establece las relaciones
 // sequelize.sync({ force: false })
