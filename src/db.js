@@ -85,4 +85,4 @@ fs.readdirSync(path.join(__dirname, '/models'))
 //     console.error('Error al sincronizar las tablas:', error);
 //   });
 
-module.exports = {...sequelize.models, conn: sequelize,};
+module.exports = {...sequelize.models, conn: sequelize, sequelize};
