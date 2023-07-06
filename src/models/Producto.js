@@ -15,12 +15,13 @@ module.exports = (sequelize) => {
       defaultValue: [], 
     },
     borrador: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
+    calificacionproducto: {type: DataTypes.ARRAY(DataTypes.INTEGER),allowNull: false,defaultValue:1}
     
   });
 
-  Producto.associate = (models) => {
-    Producto.belongsTo(models.Categoria, { foreignKey: 'categoriaId', allowNull: false });
-  };
+  // Producto.associate = (models) => {
+  //   Producto.belongsTo(models.Categoria, { foreignKey: 'categoriaId', allowNull: false });
+  // };
 
   return Producto;
 };

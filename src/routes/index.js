@@ -24,7 +24,7 @@ const {
   actualizarCategoria,
   eliminarCategoria
 } = require('../controllers/categoriaController.js');
-
+const { postOCyDetalle} = require('../controllers/postOcDet.js');
 const buscarProductos = require('../controllers/searchBarController.js');
 const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController.js');
 const {guardarUsuario} = require('../controllers/auth0Controller.js');
@@ -66,7 +66,7 @@ router.get('/categorias/:id',  obtenerCategoriaPorId);
 router.put('/categorias/:id', actualizarCategoria);
 router.delete('/categorias/:id', eliminarCategoria);
 // Rutas pagos 
-router.post("/create-order", createPaymentPreference);
+router.post('/generar-orden', postOCyDetalle);
 
 router.get("/success", (req, res) => res.send("Success"));
 router.get("/pending", (req, res) => res.send("Pending"));

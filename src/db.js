@@ -50,7 +50,7 @@ let capsEntries = entries.map((entry) => [entry[0][0].toUpperCase() + entry[0].s
 // Define las relaciones entre los modelos
 sequelize.models = Object.fromEntries(capsEntries);
 
-  const { Carrocompra, Categoria, Ordencompra, Usuario, Producto, Fotoprod, Review } = sequelize.models;
+const { Carrocompra, Categoria, Ordencompra, Usuario, Producto, Fotoprod, Review,Oc,Detalleoc } = sequelize.models;
 
   Carrocompra.belongsTo(Usuario, { foreignKey: 'idusuario' });
   Usuario.hasOne(Carrocompra, { foreignKey: 'idusuario' });
@@ -69,7 +69,9 @@ sequelize.models = Object.fromEntries(capsEntries);
 
   Producto.hasMany(Fotoprod, { foreignKey: 'idproducto' });
   Fotoprod.belongsTo(Producto, { foreignKey: 'idproducto' });
-  Producto.belongsTo(Categoria, { foreignKey: 'categoriaId', allowNull: false });
+  
+  Producto.belongsToMany(Categoria, { through: 'catprod', foreignKey: 'categoriaId'});
+  Categoria.belongsToMany(Producto, { through: 'catprod', foreignKey: 'idproducto'})
 
 
 // Sincroniza los modelos con la base de datos y establece las relaciones

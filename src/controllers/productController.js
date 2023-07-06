@@ -33,7 +33,7 @@ async function obtenerProductos(req, res) {
 // Controlador para crear un nuevo producto
 const crearProducto = async (req, res) => {
   try {
-    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, nombrecat } = req.body;
+    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund,calificacionproducto, nombrecat } = req.body;
 
     // Validaciones de los datos del producto
 
@@ -67,9 +67,11 @@ const crearProducto = async (req, res) => {
       precioproducto,
       disponibproducto,
       fotosecund,
-      categoriaId: categoria.id
+      calificacionproducto,
+      
     });
-
+      await newProduct.addCategoria(categoria)
+      console.log(Object.keys(newProduct))
     res.status(201).json(newProduct);
   } catch (error) {
     console.error('Error al crear un nuevo producto:', error);
@@ -83,12 +85,17 @@ async function obtenerProductoPorId(req, res) {
   const { id } = req.params;
 
   try {
-    const producto = await Producto.findByPk(id);
-    if (!producto) {
+    const respuesta = await Producto.findByPk(id, {include:
+      {model: Categoria,
+      attributes: ['nombrecat']}});
+    if (!respuesta) {
       return res.status(404).json({ mensaje: 'Producto no encontrado' });
     }
-
+    const {nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto,calificacionproducto, categoria} = respuesta
+    var namecat = categoria[0].nombrecat
+    const producto = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto,calificacionproducto, nombrecat: namecat}
     res.json(producto);
+    console.log(JSON.stringify(producto))
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al obtener el producto' });
@@ -98,7 +105,7 @@ async function obtenerProductoPorId(req, res) {
 // Controlador para actualizar un producto
 async function actualizarProducto(req, res) {
   const { id } = req.params;
-  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categoria } = req.body;
+  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund,calificacionproducto, categoria } = req.body;
 
   try {
     const producto = await Producto.findByPk(id);
@@ -114,6 +121,7 @@ async function actualizarProducto(req, res) {
     producto.precioproducto = precioproducto;
     producto.disponibproducto = disponibproducto;
     producto.fotosecund = fotosecund;
+    producto.calificacionproducto=calificacionproducto;
     
 
 
