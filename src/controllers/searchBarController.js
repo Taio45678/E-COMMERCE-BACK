@@ -28,14 +28,14 @@ const buscarProductos = async (req, res) => {
 
     if(price){
       const { count, rows } = await db.Producto.findAndCountAll({
+        order: [
+          orden
+        ],
         where: {
           [Op.and]:
           arrayCondiciones
 
         },
-        order: [
-          orden
-        ],
         include: {
           model: db.Categoria,
           where: condicionCat,
@@ -43,7 +43,7 @@ const buscarProductos = async (req, res) => {
           through: {attributes: []},
           required: true
         },
-        offset,
+        offset: offset,
         limit: pageSize,
       });
       const totalPages = Math.ceil(count / pageSize);
@@ -63,7 +63,7 @@ const buscarProductos = async (req, res) => {
         productos: arrayRespuesta,
       });
       console.log(JSON.stringify({
-        rows,
+        arrayRespuesta,
       }))
     }else {
       const { count, rows } = await db.Producto.findAndCountAll({
@@ -78,20 +78,26 @@ const buscarProductos = async (req, res) => {
           through: {attributes: []},
           required: true
         },
-        offset,
+        offset: offset,
         limit: pageSize,
       });
       const totalPages = Math.ceil(count / pageSize);
-
+      const arrayRespuesta = []
+      rows.forEach(producto => {
+        const {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria} = producto
+        var namecat = categoria[0].nombrecat
+        const productoFinal = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat}
+        arrayRespuesta.push(productoFinal)
+      });
       res.json({
         totalProductos: count,
         totalPages,
         currentPage: pageNumber,
         pageSize,
-        productos: rows,
+        productos: arrayRespuesta,
       });
       console.log(JSON.stringify({
-        rows,
+        arrayRespuesta,
       }))
     }
 

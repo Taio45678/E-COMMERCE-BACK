@@ -41,7 +41,7 @@ const {guardarUsuario} = require('../controllers/auth0Controller.js');
 const router = Router();
 
 router.get('/producto/buscar', buscarProductos);
-router.get('/producto', obtenerProductos);
+router.get('/producto', buscarProductos);
 router.post('/productoCrear', /*auth(config),*/ crearProducto);
 router.get('/producto/:id', obtenerProductoPorId);
 router.put('/producto/:id', /*auth(config),*/ actualizarProducto);
