@@ -1,15 +1,14 @@
-const { Usuario, carrocompra, Producto, OrdenCompra } = require('../db');
+const { Usuario,  Oc } = require('../db');
 const mercadopago = require('mercadopago'); // Importa la configuración de Mercado Pago
 const nodemailer = require('nodemailer');
 require("dotenv").config();
 const { ACCESS_TOKEN, GOOGLE_TOKEN } = process.env;
 
-
 // Configurar las opciones de envío de correo electrónico
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'all.marekt.henry@gmail.com',
+    user: 'all.market.henry@gmail.com',
     pass: GOOGLE_TOKEN,
   },
 });
@@ -17,35 +16,32 @@ const transporter = nodemailer.createTransport({
 mercadopago.configure({
   access_token: ACCESS_TOKEN, // Reemplaza con tu clave de acceso privada
 });
-
-
 const createPaymentPreference = async (req, res) => {
   try {
-    const { idusuario, idproducto } = req.body;
-    
+    const { loginuser, idoc } = req.body;    
     // // Buscar el usuario en la base de datos
-
     // // Buscar el producto en la base de datos
-    const producto = await Producto.findByPk(idproducto);
+    console.log('si entra al payment', loginuser, idoc);
 
-    if (!producto) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
-    }
+    const oc = await Oc.findOne({  where: { loginuser: loginuser }   });
+
+    if (!oc) {  return res.status(404).json({ error: 'orden compra no encontrada' });    }
+    else {   console.log('orden de compŕa si encontrada');  }
 
     // Crear la preferencia de pago utilizando la información obtenida
     const preference = {
-      items: [
-        {
-          title: producto. nombreproducto,
-          unit_price: producto.precioproducto,
-          quantity: 1,
-        },
+     items: [
+      {
+        title: oc.fechahoraoc,
+        unit_price: oc.valortotaloc,
+        quantity: 1,
+      },
       ],
       payer: {
-        email: "test_user_200519321@testuser.com",
+        email: "felipejob1@yahoo.com",
       },
       notification_url: "https://commerce-back-2025.up.railway.app/payment-notification",
-      external_reference: idusuario.toString(),
+      external_reference: loginuser,
       back_urls: {
         success: "https://commerce-back-2025.up.railway.app/success",
         pending: "https://commerce-back-2025.up.railway.app/pending",
@@ -67,7 +63,7 @@ const createPaymentPreference = async (req, res) => {
 const receiveWebhook = async (req, res) => {
   try {
     const payment = req.query;
-    console.log(payment);
+    console.log('payment: ', payment,'...');
     if (payment.type === "payment") {
       const data = await mercadopago.payment.findById(payment["data.id"]);
       console.log(data);
@@ -77,7 +73,7 @@ const receiveWebhook = async (req, res) => {
         const usuarioId = parseInt(data.external_reference);
 
         // Actualizar el estado del pago en la orden de compra en la base de datos
-        const orden = await OrdenCompra.findOne({ where: { idusuario: usuarioId } });
+        const orden = await Oc.findOne({ where: { loginuser: id } });
         if (orden) {
           await orden.update({ estado: 'aprobado' });
         }
@@ -90,8 +86,7 @@ const receiveWebhook = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
-
-  
+ 
 
 const handlePaymentNotification = async (req, res) => {
   try {
@@ -142,11 +137,5 @@ const handlePaymentNotification = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-  
-
    
-  module.exports = {
-    createPaymentPreference,
-    handlePaymentNotification,
-
-  }
+  module.exports = { createPaymentPreference, receiveWebhook, handlePaymentNotification };

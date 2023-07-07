@@ -42,7 +42,8 @@ module.exports = (sequelize) => {
       validate: {
         isIn: [[1, 2]], // 1 para usuario, 2 para admin
       },
-    }
+    },
+    isBan:{type: DataTypes.BOOLEAN,defaultValue: false},
   });
 
   return Usuario;

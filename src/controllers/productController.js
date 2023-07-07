@@ -164,6 +164,25 @@ async function eliminarProducto(req, res) {
     res.status(500).json({ mensaje: 'Error al eliminar el producto' });
   }
 }
+const actualizarBorrador = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Buscar el producto por ID
+    const producto = await Producto.findByPk(id);
+
+    if (!producto) {
+      return res.status(404).send({ error: 'Producto no encontrado' });
+    }
+
+    // Actualizar el campo "borrador" a true
+    await producto.update({ borrador: true });
+
+    return res.status(200).send({ message: 'Borrador actualizado correctamente' });
+  } catch (error) {
+    return res.status(500).send({ error: 'Error al actualizar el borrador' });
+  }
+};
 
 module.exports =  
  {  
@@ -171,5 +190,6 @@ module.exports =
   crearProducto,
   obtenerProductoPorId,
   actualizarProducto,
-  eliminarProducto
+  eliminarProducto,
+  actualizarBorrador
 };

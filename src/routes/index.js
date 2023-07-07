@@ -8,7 +8,8 @@ const {
   obtenerProductos,
   obtenerProductoPorId,
   actualizarProducto,
-  eliminarProducto
+  eliminarProducto,
+  actualizarBorrador,
 } = require('../controllers/productController.js');
 
 const {
@@ -28,6 +29,7 @@ const { postOCyDetalle} = require('../controllers/postOcDet.js');
 const buscarProductos = require('../controllers/searchBarController.js');
 const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController.js');
 const {guardarUsuario} = require('../controllers/auth0Controller.js');
+const { getOCyDetalle, getDetallesPorLoginOC } = require('../controllers/getOc.js');
 const config = {
     authRequired: false,
     auth0Logout: true,
@@ -41,11 +43,13 @@ const config = {
 const router = Router();
 
 router.get('/producto/buscar', buscarProductos);
-router.get('/producto', obtenerProductos);
+router.get('/producto', buscarProductos);
 router.post('/productoCrear', /*auth(config),*/ crearProducto);
 router.get('/producto/:id', obtenerProductoPorId);
 router.put('/producto/:id', /*auth(config),*/ actualizarProducto);
 router.delete('/producto/:id', /*auth(config),*/ eliminarProducto);
+// Ruta para actualizar el borrador de un producto por ID
+router.put('/productos/:id/borrador', actualizarBorrador);
 
 router.get('/usuarios/:idUsuario/carrito', auth(config), obtenerCarritoCompra);
 router.post('/usuarios/:idUsuario/carritoCrear', /*auth(config),*/ agregarProductoCarrito);
@@ -73,5 +77,13 @@ router.get("/pending", (req, res) => res.send("Pending"));
 router.get("/failure", (req, res) => res.send("Failure"));
 
 router.post('/payment-notification', handlePaymentNotification);
+
+
+// Ruta para obtener todas las OCs con sus detalles
+router.get('/ocs', getOCyDetalle);
+
+// Ruta para obtener los detalles de una OC por login de usuario
+router.get('/ocs/:loginuser', getDetallesPorLoginOC);
+
 
 module.exports = router;
