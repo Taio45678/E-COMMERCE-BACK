@@ -2,6 +2,7 @@ const { Router } = require('express');
 require("dotenv").config();
 const { auth } = require('express-openid-connect');
 const {SECRET_KEY,CLIENT_ID,AUTH_URL} = process.env;
+const {getAllUsers, createUser, getUserById, updateUser, deleteUser, getAccessToken } = require('../controllers/auth0Controller.js');
 const {
   crearProducto,
   obtenerProductos,
@@ -25,38 +26,39 @@ const {
 } = require('../controllers/categoriaController.js');
 const { postOCyDetalle} = require('../controllers/postOcDet.js');
 const buscarProductos = require('../controllers/searchBarController.js');
-const { registroUsuario, iniciarSesion, cambiarContraseña } = require('../controllers/authController.js');
+const { obtenerDatosUsuarios ,obtenerDatosUsuario,actualizarIsBan,actualizarRol } = require('../controllers/userController');
 const {guardarUsuario} = require('../controllers/auth0Controller.js');
-/*const config = {
+const config = {
     authRequired: false,
     auth0Logout: true,
     secret: `${SECRET_KEY}`,
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://e-commerce-front-alpha.vercel.app/',
     clientID: `${CLIENT_ID}`,
     issuerBaseURL: `${AUTH_URL}`
-  };*/
+  };
 
 
 const router = Router();
 
+//////////
 router.get('/producto/buscar', buscarProductos);
 router.get('/producto', obtenerProductos);
-router.post('/productoCrear', /*auth(config),*/ crearProducto);
+router.post('/productoCrear', auth(config), crearProducto);
 router.get('/producto/:id', obtenerProductoPorId);
-router.put('/producto/:id', /*auth(config),*/ actualizarProducto);
+router.put('/producto/:id', auth(config), actualizarProducto);
 router.delete('/producto/:id', /*auth(config),*/ eliminarProducto);
-
-router.get('/usuarios/:idUsuario/carrito', /*auth(config),*/ obtenerCarritoCompra);
-router.post('/usuarios/:idUsuario/carritoCrear', /*auth(config),*/ agregarProductoCarrito);
-router.delete('/usuarios/:idUsuario/carrito/:idProducto', /*auth(config),*/ eliminarProductoCarrito);
 
 /*
 router.post('/registro', registroUsuario);
 router.post('/login', iniciarSesion);
 router.post('/cambiar-contraseña', cambiarContraseña);
 */
+
 //este es la ruta para auth0 se supone
-router.post('/usuarios', guardarUsuario);
+router.put('/usuarios/:id/isban', actualizarIsBan);
+router.put('/usuarios/:id/rol', actualizarRol);
+router.get('/usuarios/:userId', obtenerDatosUsuario);
+router.get('/usuarios', obtenerDatosUsuarios);
 //orden compra
 
 router.post('/generar-orden', postOCyDetalle);
