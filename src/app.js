@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const { auth } = require('express-openid-connect');
 const routes = require('./routes/index.js');
-
+const { SECRET_KEY, CLIENT_ID,AUTH_URL } = process.env
 const server = express();
 
 server.name = 'API';
