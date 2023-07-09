@@ -1,4 +1,4 @@
-const { Producto, Categoria} = require('../db.js');
+const { Producto, Categoria, Review} = require('../db.js');
 
 const productValidations = require('../validations/productValidations');
 // Controlador para obtener todos los productos
@@ -33,7 +33,7 @@ async function obtenerProductos(req, res) {
 // Controlador para crear un nuevo producto
 const crearProducto = async (req, res) => {
   try {
-    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, nombrecat } = req.body;
+    const { id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund,calificacionproducto, nombrecat } = req.body;
 
     // Validaciones de los datos del producto
 
@@ -67,6 +67,7 @@ const crearProducto = async (req, res) => {
       precioproducto,
       disponibproducto,
       fotosecund,
+      calificacionproducto,
       
     });
       await newProduct.addCategoria(categoria)
@@ -84,17 +85,19 @@ async function obtenerProductoPorId(req, res) {
   const { id } = req.params;
 
   try {
-    const respuesta = await Producto.findByPk(id, {include:
+    const respuesta = await Producto.findByPk(id, {include:[
       {model: Categoria,
-      attributes: ['nombrecat']}});
+      attributes: ['nombrecat']
+    }, Review]
+  });
     if (!respuesta) {
       return res.status(404).json({ mensaje: 'Producto no encontrado' });
     }
-    const {nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria} = respuesta
+    const {nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria, reviews} = respuesta
     var namecat = categoria[0].nombrecat
-    const producto = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat}
+    const producto = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat, reviews}
     res.json(producto);
-    console.log(JSON.stringify(producto))
+    console.log(JSON.stringify(respuesta))
   } catch (error) {
     console.error(error);
     res.status(500).json({ mensaje: 'Error al obtener el producto' });
@@ -104,7 +107,7 @@ async function obtenerProductoPorId(req, res) {
 // Controlador para actualizar un producto
 async function actualizarProducto(req, res) {
   const { id } = req.params;
-  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund, categoria } = req.body;
+  const { nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, fotosecund,calificacionproducto, categoria } = req.body;
 
   try {
     const producto = await Producto.findByPk(id);
@@ -120,6 +123,7 @@ async function actualizarProducto(req, res) {
     producto.precioproducto = precioproducto;
     producto.disponibproducto = disponibproducto;
     producto.fotosecund = fotosecund;
+    producto.calificacionproducto=calificacionproducto;
     
 
 
@@ -162,6 +166,32 @@ async function eliminarProducto(req, res) {
     res.status(500).json({ mensaje: 'Error al eliminar el producto' });
   }
 }
+const actualizarBorrador = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Buscar el producto por ID
+    const producto = await Producto.findByPk(id);
+    
+    if (!producto) {
+      return res.status(404).send({ error: 'Producto no encontrado' });
+    }
+    
+   
+    // Actualizar el campo "borrador" a true
+    producto.borrador = !producto.borrador;
+    await producto.save();
+
+
+
+    //await producto.update({ borrador: true });
+
+    //return res.status(200).send({ message: 'Borrador actualizado correctamente' });
+    return res.status(200).json(producto)
+  } catch (error) {
+    return res.status(500).send({ error: 'Error al actualizar el borrador' });
+  }
+};
 
 module.exports =  
  {  
@@ -169,5 +199,6 @@ module.exports =
   crearProducto,
   obtenerProductoPorId,
   actualizarProducto,
-  eliminarProducto
+  eliminarProducto,
+  actualizarBorrador
 };

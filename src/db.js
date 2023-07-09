@@ -6,20 +6,20 @@ const { DB_USER, DB_PASSWORD, DB_HOST,DB_NAME,DB_URL,DB_PORT } = process.env;
 
 let sequelize =
   process.env.NODE_ENV === "production"
-    ? new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,{
+    ? new Sequelize({
       logging: false,
-      native: false
-      // database: DB_NAME,
-      // dialect: "postgres",
-      // host: DB_HOST,
-      // port: DB_PORT,
-      // username: DB_USER,
-      // password: DB_PASSWORD,
-      // pool: {
-      //   max: 3,
-      //   min: 1,
-      //   idle: 10000,
-      // },
+      native: false,
+      database: DB_NAME,
+      dialect: "postgres",
+      host: DB_HOST,
+      port: DB_PORT,
+      username: DB_USER,
+      password: DB_PASSWORD,
+      pool: {
+        max: 3,
+        min: 1,
+        idle: 10000,
+      },
       // dialectOptions: {
       //   ssl: {
       //     require: true,
@@ -28,7 +28,7 @@ let sequelize =
       //   },
       //   keepAlive: true,
       // },
-      //ssl: true,
+      ssl: true,
     })
     : new Sequelize(
       `${DB_URL}`,
@@ -75,6 +75,12 @@ sequelize.models = Object.fromEntries(capsEntries);
   Producto.belongsToMany(Categoria, { through: 'catprod', foreignKey: 'categoriaId'});
   Categoria.belongsToMany(Producto, { through: 'catprod', foreignKey: 'idproducto'})
 
+
+  Usuario.hasMany(Review, {foreignKey: 'usuarioId'})
+  Producto.hasMany(Review, {foreignKey: 'productoId'})
+  Review.belongsTo(Usuario, {foreignKey: 'usuarioId'});
+  Review.belongsTo(Producto, {foreignKey: 'productoId'});
+ 
 
 // Sincroniza los modelos con la base de datos y establece las relaciones
 // sequelize.sync({ force: false })

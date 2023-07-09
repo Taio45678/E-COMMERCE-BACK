@@ -15,7 +15,7 @@ module.exports = (sequelize) => {
       defaultValue: [], 
     },
     borrador: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
-    calificacionproducto: {type: DataTypes.ARRAY(DataTypes.INTEGER)}
+    //calificacionproducto: {type: DataTypes.ARRAY(DataTypes.INTEGER)}
     
   });
 

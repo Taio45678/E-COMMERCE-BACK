@@ -32,14 +32,46 @@ module.exports = (sequelize) => {
       allowNull: false,
       unique: true
     },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     rol: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         isIn: [[1, 2]], // 1 para usuario, 2 para admin
       },
+    },
+    isBan: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    last_login: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    last_ip: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    logins_count: {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   });
+  
+  Usuario.associate = (models) => {
+    Usuario.hasMany(models.Oc, { foreignKey: 'idusuario', as: 'ordenes' });
+  };
 
   return Usuario;
 };

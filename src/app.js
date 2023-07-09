@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const { auth } = require('express-openid-connect');
 const routes = require('./routes/index.js');
-
+const { SECRET_KEY, CLIENT_ID,AUTH_URL } = process.env
 const server = express();
 
 server.name = 'API';
@@ -27,10 +27,10 @@ server.use((req, res, next) => {
 const config = {
   authRequired: false,
   auth0Logout: true,
-  secret: 'a long, randomly-generated string stored in env',
-  baseURL: 'http://localhost:3000',
-  clientID: 'wS8b83wEOKDY4S9IzJgDEbRMWagqLX0V',
-  issuerBaseURL: 'https://dev-8zqxgygdfo4mmtdr.us.auth0.com'
+  secret: SECRET_KEY,
+  baseURL: 'https://e-commerce-front-alpha.vercel.app/',
+  clientID: CLIENT_ID,
+  issuerBaseURL: AUTH_URL
 };
 
 server.use(auth(config));
