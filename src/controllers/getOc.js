@@ -1,18 +1,42 @@
-const { Oc, Detalleoc } = require('../db');
+const {Oc , Detalleoc}  = require('../db');
 
-const getOCyDetalle = async (req, res) => {
+
+const paginadoOc = async (req, res) => {
+  const { page, limit } = req.query;
+
   try {
+    // Convertir los valores de página y límite en números enteros
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
+
+    // Calcular el índice de inicio y fin de las OCs paginadas
+    const startIndex = (pageNumber - 1) * limitNumber;
+    const endIndex = pageNumber * limitNumber;
+
     // Obtener todas las OCs con sus detalles
     const ocs = await Oc.findAll({
-      include: [Detalleoc]
+      include: [Detalleoc],
+      offset: startIndex,
+      limit: limitNumber
     });
 
-    return res.status(200).send(ocs);
+    const totalOCs = await Oc.count();
+
+    // Crear objeto de respuesta con los datos paginados
+    const respuesta = {
+      totalOCs,
+      paginaActual: pageNumber,
+      ocs: ocs.slice(startIndex, endIndex)
+    };
+
+    return res.status(200).send(respuesta);
   } catch (error) {
     return res.status(500).send({ error: 'Error en consulta' });
   }
 };
-const getDetallesPorLoginOC = async (req, res) => {
+
+
+const ocDetalleLog = async (req, res) => {
     const { loginuser } = req.params;
   
     try {
@@ -33,4 +57,4 @@ const getDetallesPorLoginOC = async (req, res) => {
       return res.status(500).send({ error: 'Error en consulta' });
     }
   };
-module.exports = { getOCyDetalle , getDetallesPorLoginOC};
+module.exports = { paginadoOc , ocDetalleLog};
