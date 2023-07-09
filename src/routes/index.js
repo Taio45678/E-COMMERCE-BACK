@@ -29,7 +29,7 @@ const { postOCyDetalle} = require('../controllers/postOcDet.js');
 const buscarProductos = require('../controllers/searchBarController.js');
 const { obtenerDatosUsuarios ,obtenerDatosUsuario,actualizarIsBan,actualizarRol } = require('../controllers/userController');
 const {guardarUsuario} = require('../controllers/auth0Controller.js');
-const { getOCyDetalle, getDetallesPorLoginOC } = require('../controllers/getOc.js');
+const { paginadoOc,ocDetalleLog } = require('../controllers/getOc.js');
 const config = {
   authRequired: false,
   auth0Logout: true,
@@ -77,10 +77,10 @@ router.post('/payment-notification', handlePaymentNotification);
 
 
 // Ruta para obtener todas las OCs con sus detalles
-router.get('/ocs', getOCyDetalle);
+router.get('/ocs', paginadoOc);
 
 // Ruta para obtener los detalles de una OC por login de usuario
-router.get('/ocs/:loginuser', getDetallesPorLoginOC);
+router.get('/ocs/:loginuser', ocDetalleLog);
 
 
 module.exports = router;
