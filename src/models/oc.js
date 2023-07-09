@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
- sequelize.define('oc', {
+  const Oc = sequelize.define('oc', {
   idoc: {  type: DataTypes.INTEGER,autoIncrement: true, primaryKey: true,  allowNull: false, },
   fechahoraoc: { type: DataTypes.STRING, allowNull: true, },
   hashvalidacionpago: { type: DataTypes.STRING, allowNull: true, },
@@ -9,4 +9,5 @@ module.exports = (sequelize) => {
   valortotaloc: { type: DataTypes.INTEGER, allowNull: true,  },
   estadooc: { type: DataTypes.STRING, allowNull: true,  }
   });
+  return Oc;
 };
