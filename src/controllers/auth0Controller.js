@@ -6,8 +6,8 @@ const options = {
   url: 'https://dev-jzsyp78gzn6fdoo4.us.auth0.com/oauth/token',
   headers: { 'content-type': 'application/json' },
   data: {
-    client_id: 'aN3vLxrkH6EYbqR9LqtP3QvNLftjvUUd',
-    client_secret: 'SGIdjZJ--_Ud8HJ4AzbmGvfHRsKeDpy8l1POwOs6-EecW6Atw4mi9jKgsgREBIZi',
+    client_id: 'xc1IRD9X4IyoX9RQFGpyFZ9EL8NQEKLl',
+    client_secret: 'S0FHzrEWYe_EUS64hcot6t4TOe5YYF8d8ggspcds6WS3CT31sjx5KR5nebGTAqs2',
     audience: 'https://dev-jzsyp78gzn6fdoo4.us.auth0.com/api/v2/',
     grant_type: 'client_credentials'
   }
