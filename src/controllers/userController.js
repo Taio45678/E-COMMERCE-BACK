@@ -3,19 +3,35 @@ const { Usuario } = require('../db');
 // Controlador para obtener todos los datos de todos los usuarios
 const obtenerDatosUsuarios = async (req, res) => {
   try {
+    const { page, limit } = req.query;
+
+    // Convertir los valores de página y limite en numeros enteros
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
+
+    // Calcular el indice de inicio y fin de los datos paginados
+    const startIndex = (pageNumber - 1) * limitNumber;
+    const endIndex = pageNumber * limitNumber;
+
     // Obtener todos los usuarios de la base de datos
     const usuarios = await Usuario.findAll();
-
-    // Devolver los datos de todos los usuarios
-    return res.json(usuarios);
+    const totalUsuarios = usuarios.length;
+    // Obtener los datos paginados de los usuarios
+    const usuariosPaginados = usuarios.slice(startIndex, endIndex);
+    const respuesta = {
+      totalUsuarios,
+      paginaActual: pageNumber,
+      usuarios: usuariosPaginados,
+    };
+    // Devolver los datos paginados de los usuarios
+    return res.json(respuesta);
   } catch (error) {
-    // Manejo de errores
     console.error('Error al obtener los datos de los usuarios:', error);
     res.status(500).json({ error: 'Error del servidor' });
   }
 };
 
-// Controlador para obtener todos los datos de un usuario
+// obtener todos los datos de un usuario
 const obtenerDatosUsuario = async (req, res) => {
   try {
     // Obtener el ID del usuario desde los parámetros de la solicitud
