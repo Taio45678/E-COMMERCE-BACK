@@ -14,27 +14,26 @@ const paginadoOc = async (req, res) => {
     const endIndex = pageNumber * limitNumber;
 
     // Obtener todas las OCs con sus detalles
-      const ocs = await Oc.findAll({
-        offset: startIndex,
-        limit: limitNumber,
-        include: [Detalleoc]
-      });
-  
-      const totalOCs = await Oc.count();
-  
-      // Crear objeto de respuesta con los datos paginados
-      const respuesta = {
-        totalOCs,
-        paginaActual: pageNumber,
-        ocs: ocs.slice(startIndex, endIndex)
-      };
-  
-      return res.status(200).send(respuesta);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send({ error: 'Error en consulta' });
-    }
-  };
+    const ocs = await Oc.findAll({
+      offset: startIndex,
+      limit: limitNumber,
+      include: [Detalleoc]
+    });
+
+    const totalOCs = await Oc.count();
+
+    // Crear objeto de respuesta con los datos paginados
+    const respuesta = {
+      totalOCs,
+      paginaActual: pageNumber,
+      ocs: ocs.slice(startIndex, endIndex)
+    };
+
+    return res.status(200).send(respuesta);
+  } catch (error) {
+    return res.status(500).send({ error: 'Error en consulta' });
+  }
+};
 
 
 const ocDetalleLog = async (req, res) => {
