@@ -54,6 +54,7 @@ const ocDetalleLog = async (req, res) => {
   
       return res.status(200).send(oc.Detalleocs);
     } catch (error) {
+      console.log(error)
       return res.status(500).send({ error: 'Error en consulta' });
     }
   };
