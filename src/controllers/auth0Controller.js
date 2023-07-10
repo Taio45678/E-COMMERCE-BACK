@@ -2,7 +2,7 @@ const axios = require("axios");
 const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
-
+require ('dotenv').config();
 // Ruta al archivo HTML
 const htmlFilePath = path.join(__dirname, '../html/mail.html');
 
