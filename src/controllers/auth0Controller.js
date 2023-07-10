@@ -1,6 +1,25 @@
 const axios = require("axios");
+const fs = require('fs');
+const path = require('path');
+const nodemailer = require('nodemailer');
+
+// Ruta al archivo HTML
+const htmlFilePath = path.join(__dirname, '../html/mail.html');
+
+// Leer el contenido del archivo HTML
+const htmlContent = fs.readFileSync(htmlFilePath, 'utf-8');
+const GOOGLE_TOKEN = proccess.env.GOOGLE_TOKEN
+
 let accessToken = ""; // Variable global para almacenar el token de acceso
 const { Usuario } = require('../db');
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'all.market.henry@gmail.com',
+    pass: GOOGLE_TOKEN,
+  },
+});
+
 const options = {
   method: 'POST',
   url: 'https://dev-jzsyp78gzn6fdoo4.us.auth0.com/oauth/token',
@@ -21,7 +40,22 @@ axios(options)
   .catch(error => {
     console.error("Error al obtener el token de acceso:", error);
   });
-
+  const enviarCorreoBienvenida = (email) => {
+    const mailOptions = {
+      from: 'all.market.henry@gmail.com',
+      to: email,
+      subject: '¡Bienvenido a nuestra plataforma!',
+     html: htmlContent,
+    };
+  
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error al enviar el correo electrónico de bienvenida:', error);
+      } else {
+        console.log('Correo electrónico de bienvenida enviado:', info.response);
+      }
+    });
+  };
   const obtenerDatosDeAuth0 = async () => {
     
     try {
@@ -83,6 +117,8 @@ axios(options)
             last_ip,
             logins_count
           });
+          // Enviar correo de bienvenida al nuevo usuario
+          enviarCorreoBienvenida(email);
         }
       }
     } catch (error) {
