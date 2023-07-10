@@ -3,12 +3,13 @@ const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
 require ('dotenv').config();
+const { GOOGLE_TOKEN } = process.env;
 // Ruta al archivo HTML
 const htmlFilePath = path.join(__dirname, '../html/mail.html');
 
 // Leer el contenido del archivo HTML
 const htmlContent = fs.readFileSync(htmlFilePath, 'utf-8');
-const GOOGLE_TOKEN = proccess.env.GOOGLE_TOKEN
+
 
 let accessToken = ""; // Variable global para almacenar el token de acceso
 const { Usuario } = require('../db');
