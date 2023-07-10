@@ -65,10 +65,10 @@ const actualizarIsBan = async (req, res) => {
     }
 
     // Actualizar el valor de 'isBan' a 'true'
-    usuario.isBan = true;
+    usuario.isBan = !usuario.isBan;
     await usuario.save();
 
-    return res.status(200).json({ message: 'El valor de isBan ha sido actualizado a true' });
+    return res.status(200).json({ message: 'El valor de isBan ha sido actualizado' });
   } catch (error) {
     console.error('Error al actualizar isBan:', error);
     return res.status(500).json({ message: 'Error al actualizar isBan' });
