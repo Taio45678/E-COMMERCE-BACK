@@ -73,8 +73,13 @@ fs.readdirSync(path.join(__dirname, '/models'))
     Producto.belongsToMany(Categoria, { through: 'catprod', foreignKey: 'categoriaId'});
     Categoria.belongsToMany(Producto, { through: 'catprod', foreignKey: 'idproducto'})
   
-    Oc.hasMany(Detalleoc, { foreignKey: 'ocId' });
-    Detalleoc.belongsTo(Oc, { foreignKey: 'ocId' });
+   
+Oc.hasMany(Detalleoc, {
+  foreignKey: 'ocid',
+});
+Detalleoc.belongsTo(Oc, {
+  foreignKey: 'ocid',
+});
     
 // Sincroniza los modelos con la base de datos y establece las relaciones
 // sequelize.sync({ force: false })

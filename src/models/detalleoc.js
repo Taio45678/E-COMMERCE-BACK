@@ -8,7 +8,13 @@ module.exports = (sequelize) => {
   valorunitario: { type: DataTypes.INTEGER, allowNull: true,  },
   cant: { type: DataTypes.INTEGER, allowNull: true,  },
   subtotal: { type: DataTypes.STRING, allowNull: true,  },
-  idoc: { type: DataTypes.INTEGER, allowNull: true,  }
+  idoc: { type: DataTypes.INTEGER, allowNull: true,  },
+  ocid: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
   });
+  
   return Detalleoc;
+
 };
