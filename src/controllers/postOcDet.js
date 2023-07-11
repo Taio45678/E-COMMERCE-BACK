@@ -9,34 +9,39 @@ const dummy1 = { "loginuser":"felipejob1@yahoo.com", "idoc":2 };
 const postOCyDetalle = async (req, res) => {
   const { loginuser, hashvalidacionpago, estadooc, detalleocx } = req.body;
   let valortotaloc = 0;
- 
+
   try {
     const fechahoraocaux = new Date();
     const fechahoraoc = fechahoraocaux.toISOString();
+
+    // Calcular el valortotaloc sumando los subtotales
+    for (let i = 0; i < detalleocx.length; i++) {
+      const { valorunitario, cant } = detalleocx[i];
+      const subtotal = valorunitario * cant; // Calcular el subtotal
+      valortotaloc += subtotal; // Sumar el subtotal al valortotaloc
+    }
+
+    const newOC = await Oc.create({ fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
+    // Obtener el idoc generado para la OC recién insertada
     const idoc = newOC.idoc;
+
     // Insertar en la tabla "detalleoc" por cada objeto en "detalleocx"
     for (let i = 0; i < detalleocx.length; i++) {
       const { idproducto, nombreproducto, valorunitario, cant } = detalleocx[i];
       const subtotal = valorunitario * cant; // Calcular el subtotal
 
       await Detalleoc.create({ idoc, idproducto, nombreproducto, valorunitario, cant, subtotal });
-
-      valortotaloc += subtotal; // Sumar el subtotal al valortotaloc
     }
-
-    // Crear la OC y agregar el valortotaloc
-    const newOC = await Oc.create({ fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
     
-
     console.log('newOC: ', newOC);
     console.log('idoc: ', newOC.idoc);
 
-    /** */
-    const urlx = 'https://commerce-back-2025.up.railway.app/create-order';
-    const bodyx = {
-      loginuserparam: loginuser,
-      idocparam: idoc
-    };
+/** */
+     const urlx = 'https://commerce-back-2025.up.railway.app/create-order';
+     const bodyx = {
+       loginuserparam: loginuser,
+       idocparam: idoc
+     };
 
     try{
     let response = await axios.post(urlx, bodyx);
@@ -60,8 +65,7 @@ const postOCyDetalle = async (req, res) => {
     }
 
   
-  } catch (error) { console.log(error);
-     return res.status(500).send({ error: 'Error en consulta' });  }
+  } catch (error) {  return res.status(500).send({ error: 'Error en consulta' });  }
 };
 module.exports = { postOCyDetalle };
 
