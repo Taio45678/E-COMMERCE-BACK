@@ -60,7 +60,8 @@ const postOCyDetalle = async (req, res) => {
     }
 
   
-  } catch (error) {  return res.status(500).send({ error: 'Error en consulta' });  }
+  } catch (error) { console.log(error);
+     return res.status(500).send({ error: 'Error en consulta' });  }
 };
 module.exports = { postOCyDetalle };
 
