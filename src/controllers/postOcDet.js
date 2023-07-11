@@ -38,17 +38,6 @@ const postOCyDetalle = async (req, res) => {
       idocparam: idoc
     };
 
-    
-    console.log('newOC: ', newOC);
-    console.log('idoc: ', newOC.idoc);
-
-/** */
-     const urlx = 'https://commerce-back-2025.up.railway.app/create-order';
-     const bodyx = {
-       loginuserparam: loginuser,
-       idocparam: idoc
-     };
-
     try{
     let response = await axios.post(urlx, bodyx);
     
