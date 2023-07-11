@@ -1,7 +1,7 @@
 const { Router } = require('express');
 require("dotenv").config();
 const { auth } = require('express-openid-connect');
-const {SECRET_KEY,CLIENT_ID,AUTH_URL} = process.env;
+const {SECRET_KEY,CLIENT_ID,AUTH_URL,GOOGLE_TOKEN} = process.env;
 const { createPaymentPreference, handlePaymentNotification, receiveWebhook } = require("../controllers/payamentController.js")
 const {
   crearProducto,
@@ -77,6 +77,7 @@ router.post('/webhook', receiveWebhook);
     const correoUsuario = req.query.external_reference;
 
     // Buscar la orden de compra por el correo electrónico del usuario
+    const Oc = require('../db.js'); // Importa el modelo Oc
     const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
@@ -85,6 +86,15 @@ router.post('/webhook', receiveWebhook);
       await orden.save();
 
       // Enviar correo electrónico de confirmación al usuario
+      const nodemailer = require('nodemailer');
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'all.market.henry@gmail.com',
+          pass: GOOGLE_TOKEN,
+        },
+      });
+
       const mailOptions = {
         from: 'all.market.henry@gmail.com',
         to: correoUsuario,
@@ -114,6 +124,7 @@ router.get("/pending", async (req, res) => {
     const correoUsuario = req.query.external_reference;
 
     // Buscar la orden de compra por el correo electrónico del usuario
+    const Oc = require('../db.js'); // Importa el modelo Oc
     const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
@@ -135,6 +146,7 @@ router.get("/failure", async (req, res) => {
     const correoUsuario = req.query.external_reference;
 
     // Buscar la orden de compra por el correo electrónico del usuario
+    const Oc = require('../db.js'); // Importa el modelo Oc
     const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
@@ -149,6 +161,9 @@ router.get("/failure", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+
 router.post('/payment-notification', handlePaymentNotification);
 
 
