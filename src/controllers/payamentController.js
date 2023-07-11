@@ -92,7 +92,7 @@ const createPaymentPreference = async (req, res) => {
 
     if (orden) {
       // Actualizar el estado de la orden de compra a 'aprobado'
-      await orden.update({ estadooc: 'aprobado' }, { where: { idoc: idocparam } });
+      await orden.update({ estadooc: 'aprobado' });
 
       // Buscar el usuario en la base de datos por su correo electrónico
       const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
@@ -181,7 +181,7 @@ const handlePaymentNotification = async (req, res) => {
 
       if (orden) {
         // Actualizar el estado de la orden de compra a 'aprobado'
-        await orden.update({ estadooc: 'aprobado' });
+        await orden.update({ estadooc: 'aprobado' }, { where: { idoc: idocparam } });
 
         // Buscar el usuario en la base de datos por su correo electrónico
         const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
