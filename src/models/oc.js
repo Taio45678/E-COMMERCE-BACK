@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-
+const {Usuario} = require('../db');
 module.exports = (sequelize) => {
   const Oc = sequelize.define('oc', {
   idoc: {  type: DataTypes.INTEGER,autoIncrement: true, primaryKey: true,  allowNull: false, },
