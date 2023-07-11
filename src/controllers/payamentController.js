@@ -132,28 +132,32 @@ const handlePaymentNotification = async (req, res) => {
 
       // Verificar si el pago fue aprobado
       if (paymentData.status === 'approved') {
-        // Buscar el usuario en la base de datos
-        const usuario = await Usuario.findByPk(usuarioId);
+        const orden = await Oc.findOne({ where: { loginuser: usuarioId } });
+        if (orden) {
+          await orden.update({ estado: 'aprobado' });
 
-        // Enviar correo electrónico de confirmación al usuario
-        const mailOptions = {
-          from: 'all.market.henry@gmail.com',
-          to: usuario.email,
-          subject: 'Confirmación de compra',
-          text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
-        };
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {  console.error(error);  } else {
-            console.log('Correo electrónico enviado:', info.response);
-          }
-        });
-        const orden = await OrdenCompra.findOne({ where: { idusuario: usuarioId } });
-        if (orden) {   await orden.update({ estado: 'aprobado' });  }
+          // Buscar el usuario en la base de datos
+          const usuario = await Usuario.findByPk(usuarioId);
+
+          // Enviar correo electrónico de confirmación al usuario
+          const mailOptions = {
+            from: 'all.market.henry@gmail.com',
+            to: usuario.email,
+            subject: 'Confirmación de compra',
+            text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+          };
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.error(error);
+            } else {
+              console.log('Correo electrónico enviado:', info.response);
+            }
+          });
+        }
       }
     }
-
-    // Enviar una respuesta exitosa a Mercado Pago para confirmar la recepción de la notificación
-    res.sendStatus(200);
+    
+    res.sendStatus(204);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
