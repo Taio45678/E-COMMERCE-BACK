@@ -77,7 +77,7 @@ router.post('/webhook', receiveWebhook);
     const correoUsuario = req.query.external_reference;
 
     // Buscar la orden de compra por el correo electrónico del usuario
-    const Oc = require('../db.js'); // Importa el modelo Oc
+    const {Oc} = require('../db.js'); // Importa el modelo Oc
     const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
@@ -124,7 +124,7 @@ router.get("/pending", async (req, res) => {
     const correoUsuario = req.query.external_reference;
 
     // Buscar la orden de compra por el correo electrónico del usuario
-    const Oc = require('../db.js'); // Importa el modelo Oc
+    const {Oc} = require('../db.js'); // Importa el modelo Oc
     const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
@@ -146,7 +146,7 @@ router.get("/failure", async (req, res) => {
     const correoUsuario = req.query.external_reference;
 
     // Buscar la orden de compra por el correo electrónico del usuario
-    const Oc = require('../db.js'); // Importa el modelo Oc
+    const {Oc} = require('../db.js'); // Importa el modelo Oc
     const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
