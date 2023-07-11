@@ -38,11 +38,6 @@ const createPaymentPreference = async (req, res) => {
       console.log('ORDEN DE COMPRA SI ENCONTRADA:', oc);
     }
 
-    if (oc.estadooc === 'aprobado') {
-      // La orden de compra ya está aprobada, no es necesario crear una nueva
-      return res.json({ message: 'La orden de compra ya está aprobada' });
-    }
-
     const largarray = itemsx.length;
     console.log('ITEMS:');
     const itemsa = [];
@@ -68,12 +63,18 @@ const createPaymentPreference = async (req, res) => {
     console.log('Items:', arrayObjt);
 
     const preference = {
-      items: arrayObjt,
+      items: [
+        {
+          title: detallestring,
+          unit_price: oc.valortotaloc,
+          quantity: 1,
+        },
+      ],
       payer: {
         email: loginuserparam,
       },
       notification_url: `${eURL}/payment-notification`,
-      external_reference: loginuserparam,
+      external_reference: idocparam, // Usamos el idocparam como referencia externa
       back_urls: {
         success: `${eURL}/success`,
         pending: `${eURL}/pending`,
@@ -86,27 +87,32 @@ const createPaymentPreference = async (req, res) => {
     // Obtener el correo electrónico del usuario desde la referencia externa
     const correoUsuario = loginuserparam;
 
-    // Actualizar el estado de la orden de compra a 'aprobado'
-    await oc.update({ estadooc: 'aprobado' });
+    // Buscar la orden de compra por el idocparam
+    const orden = await Oc.findOne({ where: { idoc: idocparam } });
 
-    // Buscar el usuario en la base de datos por su correo electrónico
-    const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
+    if (orden) {
+      // Actualizar el estado de la orden de compra a 'aprobado'
+      await orden.update({ estadooc: 'aprobado' });
 
-    // Enviar correo electrónico de confirmación al usuario
-    const mailOptions = {
-      from: 'all.market.henry@gmail.com',
-      to: correoUsuario,
-      subject: 'Confirmación de compra',
-      text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
-    };
+      // Buscar el usuario en la base de datos por su correo electrónico
+      const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error(error);
-      } else {
-        console.log('Correo electrónico enviado:', info.response);
-      }
-    });
+      // Enviar correo electrónico de confirmación al usuario
+      const mailOptions = {
+        from: 'all.market.henry@gmail.com',
+        to: correoUsuario,
+        subject: 'Confirmación de compra',
+        text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Correo electrónico enviado:', info.response);
+        }
+      });
+    }
 
     res.json(response.body);
   } catch (error) {
@@ -114,6 +120,7 @@ const createPaymentPreference = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 const receiveWebhook = async (req, res) => {
   try {
     const payment = req.query;
