@@ -9,11 +9,11 @@ const dummy1 = { "loginuser":"felipejob1@yahoo.com", "idoc":2 };
 const postOCyDetalle = async (req, res) => {
   const { loginuser, hashvalidacionpago, estadooc, detalleocx } = req.body;
   let valortotaloc = 0;
-
+ 
   try {
     const fechahoraocaux = new Date();
     const fechahoraoc = fechahoraocaux.toISOString();
-    
+    const idoc = newOC.idoc;
     // Insertar en la tabla "detalleoc" por cada objeto en "detalleocx"
     for (let i = 0; i < detalleocx.length; i++) {
       const { idproducto, nombreproducto, valorunitario, cant } = detalleocx[i];
@@ -26,7 +26,7 @@ const postOCyDetalle = async (req, res) => {
 
     // Crear la OC y agregar el valortotaloc
     const newOC = await Oc.create({ fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
-    const idoc = newOC.idoc;
+    
 
     console.log('newOC: ', newOC);
     console.log('idoc: ', newOC.idoc);
