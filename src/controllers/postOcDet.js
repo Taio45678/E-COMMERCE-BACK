@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const { Oc, Detalleoc } = require('../db');
 
-const { createPaymentPreference } = require('./paymentController.js');
+const { createPaymentPreference } = require('./payamentController.js');
 const dummy1 = { "loginuser":"felipejob1@yahoo.com", "idoc":2 };
 
 const postOCyDetalle = async (req, res) => {
