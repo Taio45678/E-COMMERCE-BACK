@@ -18,7 +18,6 @@ const transporter = nodemailer.createTransport({
 mercadopago.configure({
   access_token: 'TEST-4280842424471491-070211-516c8b20e0878a4ffcd8b1635fd20deb-1409292019',
 });
-
 const createPaymentPreference = async (req, res) => {
   try {
     const { loginuserparam, idocparam } = req.body;
@@ -81,15 +80,21 @@ const createPaymentPreference = async (req, res) => {
         failure: `${eURL}/failure`,
       },
     };
-    await oc.update({ estadooc: 'pendiente' }, { where: { idoc: idocparam } });
+
     const response = await mercadopago.preferences.create(preference);
+
+    // Obtener el correo electrónico del usuario desde la referencia externa
+    const correoUsuario = loginuserparam;
+
+    // Buscar la orden de compra por el correo electrónico del usuario
+    const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
+
     res.json(response.body);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 };
-
 const receiveWebhook = async (req, res) => {
   try {
     const payment = req.query;
