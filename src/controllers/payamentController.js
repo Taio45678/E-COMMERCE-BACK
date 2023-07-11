@@ -122,42 +122,33 @@ const createPaymentPreference = async (req, res) => {
 };
 const receiveWebhook = async (req, res) => {
   try {
-    const payment = req.query;
-    console.log('Payment:', payment);
+    const { id, topic, resource } = req.body;
 
-    if (payment.type === 'payment') {
-      const data = await mercadopago.payment.findById(payment['data.id']);
-      console.log('Data:', data);
+    if (topic === 'payment' && resource.status === 'approved') {
+      const externalReference = resource.external_reference;
 
-      // Verificar que el pago se haya realizado con éxito
-      if (data.status === 'approved') {
-        const externalReference = data.external_reference;
+      const orden = await Oc.findOne({ where: { loginuser: externalReference } });
 
-        // Buscar la orden de compra por el external_reference
-        const orden = await Oc.findOne({ where: { loginuser: externalReference } });
+      if (orden) {
+        await orden.update({ estadooc: 'aprobado' });
 
-        if (orden) {
-          // Actualizar el estado de la orden de compra a 'aprobado'
-          await orden.update({ estadooc: 'aprobado' });
+        const usuario = await Usuario.findOne({ where: { email: orden.loginuser } });
 
-          const usuario = await Usuario.findOne({ where: { email: orden.loginuser } });
+        if (usuario) {
+          const mailOptions = {
+            from: 'all.market.henry@gmail.com',
+            to: usuario.email,
+            subject: 'Confirmación de compra',
+            text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+          };
 
-          if (usuario) {
-            const mailOptions = {
-              from: 'all.market.henry@gmail.com',
-              to: usuario.email,
-              subject: 'Confirmación de compra',
-              text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
-            };
-
-            transporter.sendMail(mailOptions, (error, info) => {
-              if (error) {
-                console.error(error);
-              } else {
-                console.log('Correo electrónico enviado:', info.response);
-              }
-            });
-          }
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.error(error);
+            } else {
+              console.log('Correo electrónico enviado:', info.response);
+            }
+          });
         }
       }
     }
