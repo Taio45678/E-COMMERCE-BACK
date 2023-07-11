@@ -74,10 +74,10 @@ fs.readdirSync(path.join(__dirname, '/models'))
     Categoria.belongsToMany(Producto, { through: 'catprod', foreignKey: 'idproducto'})
   
 Oc.hasMany(Detalleoc, {
-  foreignKey: 'ocid',
+  foreignKey: 'idoc',
 });
 Detalleoc.belongsTo(Oc, {
-  foreignKey: 'ocid',
+  foreignKey: 'idoc',
 });
     
 // Sincroniza los modelos con la base de datos y establece las relaciones

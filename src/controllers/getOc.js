@@ -1,6 +1,5 @@
 const {Oc , Detalleoc}  = require('../db');
 
-
 const paginadoOc = async (req, res) => {
   const { page, limit } = req.query;
 
@@ -17,7 +16,7 @@ const paginadoOc = async (req, res) => {
     const ocs = await Oc.findAll({
       offset: startIndex,
       limit: limitNumber,
-      include: [Detalleoc]
+      include: [Detalleoc] // Asegúrate de incluir el modelo Detalleoc correctamente
     });
 
     const totalOCs = await Oc.count();
