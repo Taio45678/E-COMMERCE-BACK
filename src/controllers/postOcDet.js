@@ -5,9 +5,8 @@ const { Oc, Detalleoc } = require('../db');
 const { createPaymentPreference } = require('./payamentController.js');
 
 const dummy1 = { "loginuser":"felipejob1@yahoo.com", "idoc":2 };
-
 const postOCyDetalle = async (req, res) => {
-  const { loginuser, hashvalidacionpago, valortotaloc,estadooc, detalleocx } = req.body;
+  const { loginuser, hashvalidacionpago, estadooc, detalleocx } = req.body;
   let valortotaloc = 0;
 
   try {
@@ -26,6 +25,7 @@ const postOCyDetalle = async (req, res) => {
 
       valortotaloc += subtotal; // Sumar el subtotal al valortotaloc
     }
+
     
     console.log('newOC: ', newOC);
     console.log('idoc: ', newOC.idoc);
