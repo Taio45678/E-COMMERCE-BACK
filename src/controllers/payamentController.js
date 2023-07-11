@@ -85,7 +85,7 @@ const createPaymentPreference = async (req, res) => {
     const response = await mercadopago.preferences.create(preference);
 
     // Marcar la orden de compra como 'pendiente'
-    await Oc.update({ estadooc: 'pendiente' });
+    await oc.update({ estadooc: 'pendiente' });
 
     // Procesar la notificación de pago en segundo plano
     handlePaymentNotification(req, res);
