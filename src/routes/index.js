@@ -67,7 +67,9 @@ router.get('/categorias/:id',  obtenerCategoriaPorId);
 router.put('/categorias/:id', actualizarCategoria);
 router.delete('/categorias/:id', eliminarCategoria);
 // Rutas pagos 
-router.post('/generar-orden', postOCyDetalle);
+router.post('/generar-orden', postOCyDetalle); /**aqui oc y detalle OK  */
+
+ router.post('/create-order', createPaymentPreference);
 
 router.get("/success", (req, res) => res.send("Success"));
 router.get("/pending", (req, res) => res.send("Pending"));
