@@ -145,33 +145,31 @@ const handlePaymentNotification = async (req, res) => {
       // Obtener el correo electrónico del usuario desde la referencia externa
       const correoUsuario = resource.external_reference;
 
-      // Utilizar receiveWebhook para obtener los datos de confirmación
-      const paymentData = await receiveWebhook({ query: { type: 'payment', 'data.id': id } });
+      // Buscar la orden de compra por el correo electrónico del usuario
+      const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
-      // Verificar si el pago fue aprobado
-      if (paymentData.status === 'approved') {
-        const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
-        if (orden) {
-          await orden.update({ estadooc: 'aprobado' });
+      if (orden) {
+        // Actualizar el estado de la orden de compra a 'aprobado'
+        await orden.update({ estadooc: 'aprobado' });
 
-          // Buscar el usuario en la base de datos
-          const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
+        // Buscar el usuario en la base de datos por su correo electrónico
+        const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
 
-          // Enviar correo electrónico de confirmación al usuario
-          const mailOptions = {
-            from: 'all.market.henry@gmail.com',
-            to: correoUsuario,
-            subject: 'Confirmación de compra',
-            text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
-          };
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.error(error);
-            } else {
-              console.log('Correo electrónico enviado:', info.response);
-            }
-          });
-        }
+        // Enviar correo electrónico de confirmación al usuario
+        const mailOptions = {
+          from: 'all.market.henry@gmail.com',
+          to: correoUsuario,
+          subject: 'Confirmación de compra',
+          text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            console.error(error);
+          } else {
+            console.log('Correo electrónico enviado:', info.response);
+          }
+        });
       }
     }
 
