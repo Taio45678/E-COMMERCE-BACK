@@ -81,7 +81,7 @@ const createPaymentPreference = async (req, res) => {
         failure: `${eURL}/failure`,
       },
     };
-    await orden.update({ estadooc: 'pendiente' }, { where: { idoc: idocparam } });
+    await oc.update({ estadooc: 'pendiente' }, { where: { idoc: idocparam } });
     const response = await mercadopago.preferences.create(preference);
     res.json(response.body);
   } catch (error) {
