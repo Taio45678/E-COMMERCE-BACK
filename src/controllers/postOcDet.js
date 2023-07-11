@@ -28,7 +28,6 @@ const postOCyDetalle = async (req, res) => {
     const newOC = await Oc.create({ fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
     const idoc = newOC.idoc;
 
-
     console.log('newOC: ', newOC);
     console.log('idoc: ', newOC.idoc);
 
