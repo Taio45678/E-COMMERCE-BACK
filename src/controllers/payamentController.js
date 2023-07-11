@@ -74,7 +74,7 @@ const createPaymentPreference = async (req, res) => {
         email: loginuserparam,
       },
       notification_url: `${eURL}/payment-notification`,
-      external_reference: idocparam, // Usamos el idocparam como referencia externa
+      external_reference: loginuserparam,
       back_urls: {
         success: `${eURL}/success`,
         pending: `${eURL}/pending`,
@@ -82,17 +82,17 @@ const createPaymentPreference = async (req, res) => {
       },
     };
 
-    const response = await mercadopago.preferences.create(preference);
+     const response = await mercadopago.preferences.create(preference);
 
     // Obtener el correo electrónico del usuario desde la referencia externa
     const correoUsuario = loginuserparam;
 
-    // Buscar la orden de compra por el idocparam
-    const orden = await Oc.findOne({ where: { idoc: idocparam } });
+    // Buscar la orden de compra por el correo electrónico del usuario
+    const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
       // Actualizar el estado de la orden de compra a 'aprobado'
-      await orden.update({ estadooc: 'aprobado' });
+      await orden.update({ estadooc: 'aprobado' }, { where: { idoc: idocparam } });
 
       // Buscar el usuario en la base de datos por su correo electrónico
       const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
@@ -132,16 +132,13 @@ const receiveWebhook = async (req, res) => {
 
       // Verificar que el pago se haya realizado con éxito
       if (data.status === 'approved') {
-        const externalReference = data.external_reference;
-
-        // Buscar la orden de compra por el external_reference
-        const orden = await Oc.findOne({ where: { loginuser: externalReference } });
+        const usuarioId = parseInt(data.external_reference);
+        const orden = await Oc.findOne({ where: { loginuser: data.payer.email } });
 
         if (orden) {
-          // Actualizar el estado de la orden de compra a 'aprobado'
           await orden.update({ estadooc: 'aprobado' });
 
-          const usuario = await Usuario.findOne({ where: { email: orden.loginuser } });
+          const usuario = await Usuario.findOne({ where: { email: data.payer.email } });
 
           if (usuario) {
             const mailOptions = {
@@ -169,7 +166,6 @@ const receiveWebhook = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 const handlePaymentNotification = async (req, res) => {
   try {
     // Obtener la información de la notificación de pago de Mercado Pago
@@ -214,5 +210,4 @@ const handlePaymentNotification = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 module.exports = { createPaymentPreference, receiveWebhook, handlePaymentNotification };
