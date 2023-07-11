@@ -38,6 +38,11 @@ const createPaymentPreference = async (req, res) => {
       console.log('ORDEN DE COMPRA SI ENCONTRADA:', oc);
     }
 
+    if (oc.estadooc === 'aprobado') {
+      // La orden de compra ya está aprobada, no es necesario crear una nueva
+      return res.json({ message: 'La orden de compra ya está aprobada' });
+    }
+
     const largarray = itemsx.length;
     console.log('ITEMS:');
     const itemsa = [];
@@ -63,13 +68,7 @@ const createPaymentPreference = async (req, res) => {
     console.log('Items:', arrayObjt);
 
     const preference = {
-      items: [
-        {
-          title: detallestring,
-          unit_price: oc.valortotaloc,
-          quantity: 1,
-        },
-      ],
+      items: arrayObjt,
       payer: {
         email: loginuserparam,
       },
@@ -87,32 +86,27 @@ const createPaymentPreference = async (req, res) => {
     // Obtener el correo electrónico del usuario desde la referencia externa
     const correoUsuario = loginuserparam;
 
-    // Buscar la orden de compra por el correo electrónico del usuario
-    const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
+    // Actualizar el estado de la orden de compra a 'aprobado'
+    await oc.update({ estadooc: 'aprobado' });
 
-    if (orden) {
-      // Actualizar el estado de la orden de compra a 'aprobado'
-      await orden.update({ estadooc: 'aprobado' });
+    // Buscar el usuario en la base de datos por su correo electrónico
+    const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
 
-      // Buscar el usuario en la base de datos por su correo electrónico
-      const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
+    // Enviar correo electrónico de confirmación al usuario
+    const mailOptions = {
+      from: 'all.market.henry@gmail.com',
+      to: correoUsuario,
+      subject: 'Confirmación de compra',
+      text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+    };
 
-      // Enviar correo electrónico de confirmación al usuario
-      const mailOptions = {
-        from: 'all.market.henry@gmail.com',
-        to: correoUsuario,
-        subject: 'Confirmación de compra',
-        text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
-      };
-
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error(error);
-        } else {
-          console.log('Correo electrónico enviado:', info.response);
-        }
-      });
-    }
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('Correo electrónico enviado:', info.response);
+      }
+    });
 
     res.json(response.body);
   } catch (error) {
@@ -122,33 +116,42 @@ const createPaymentPreference = async (req, res) => {
 };
 const receiveWebhook = async (req, res) => {
   try {
-    const { id, topic, resource } = req.body;
+    const payment = req.query;
+    console.log('Payment:', payment);
 
-    if (topic === 'payment' && resource.status === 'approved') {
-      const externalReference = resource.external_reference;
+    if (payment.type === 'payment') {
+      const data = await mercadopago.payment.findById(payment['data.id']);
+      console.log('Data:', data);
 
-      const orden = await Oc.findOne({ where: { loginuser: externalReference } });
+      // Verificar que el pago se haya realizado con éxito
+      if (data.status === 'approved') {
+        const externalReference = data.external_reference;
 
-      if (orden) {
-        await orden.update({ estadooc: 'aprobado' });
+        // Buscar la orden de compra por el external_reference
+        const orden = await Oc.findOne({ where: { loginuser: externalReference } });
 
-        const usuario = await Usuario.findOne({ where: { email: orden.loginuser } });
+        if (orden) {
+          // Actualizar el estado de la orden de compra a 'aprobado'
+          await orden.update({ estadooc: 'aprobado' });
 
-        if (usuario) {
-          const mailOptions = {
-            from: 'all.market.henry@gmail.com',
-            to: usuario.email,
-            subject: 'Confirmación de compra',
-            text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
-          };
+          const usuario = await Usuario.findOne({ where: { email: orden.loginuser } });
 
-          transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.error(error);
-            } else {
-              console.log('Correo electrónico enviado:', info.response);
-            }
-          });
+          if (usuario) {
+            const mailOptions = {
+              from: 'all.market.henry@gmail.com',
+              to: usuario.email,
+              subject: 'Confirmación de compra',
+              text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                console.error(error);
+              } else {
+                console.log('Correo electrónico enviado:', info.response);
+              }
+            });
+          }
         }
       }
     }

@@ -7,55 +7,66 @@ const { createPaymentPreference } = require('./payamentController.js');
 const dummy1 = { "loginuser":"felipejob1@yahoo.com", "idoc":2 };
 
 const postOCyDetalle = async (req, res) => {
-  const { loginuser, hashvalidacionpago, valortotaloc,estadooc, detalleocx } = req.body;
+  const { loginuser, hashvalidacionpago, valortotaloc, estadooc, detalleocx } = req.body;
 
   try {
-    const fechahoraocaux = new Date();
-    const fechahoraoc = fechahoraocaux.toISOString();
-    const newOC = await Oc.create({  fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
-    // Obtener el idoc generado para la OC recién insertada
-    const idoc = newOC.idoc;
+    const oc = await Oc.findOne({ where: { loginuser, hashvalidacionpago, estadooc: 'pendiente' } });
 
-    // Insertar en la tabla "detalleoc" por cada objeto en "detalleocx"
+    if (oc) {
+      // Actualizar la orden de compra existente
+      await oc.update({ valortotaloc, estadooc });
+    } else {
+      // Crear una nueva orden de compra
+      const fechahoraoc = new Date().toISOString();
+      const newOC = await Oc.create({ fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
+      console.log('newOC:', newOC);
+    }
+
+    // Obtener el idoc generado para la OC recién insertada o actualizada
+    const idoc = oc ? oc.idoc : newOC.idoc;
+
+    // Insertar o actualizar en la tabla "detalleoc" por cada objeto en "detalleocx"
     for (let i = 0; i < detalleocx.length; i++) {
       const { idproducto, nombreproducto, valorunitario, cant, subtotal } = detalleocx[i];
-      await Detalleoc.create({ idoc, idproducto, nombreproducto, valorunitario, cant, subtotal });
+      if (oc) {
+        // Actualizar el detalle de la orden de compra existente
+        await Detalleoc.update(
+          { idproducto, nombreproducto, valorunitario, cant, subtotal },
+          { where: { idoc } }
+        );
+      } else {
+        // Crear un nuevo detalle de orden de compra
+        await Detalleoc.create({ idoc, idproducto, nombreproducto, valorunitario, cant, subtotal });
+      }
     }
-    
-    console.log('newOC: ', newOC);
-    console.log('idoc: ', newOC.idoc);
 
-/** */
-     const urlx = 'https://commerce-back-2025.up.railway.app/create-order';
-     const bodyx = {
-       loginuserparam: loginuser,
-       idocparam: idoc
-     };
+    const urlx = 'https://commerce-back-2025.up.railway.app/create-order';
+    const bodyx = {
+      loginuserparam: loginuser,
+      idocparam: idoc
+    };
 
-    try{
-    let response = await axios.post(urlx, bodyx);
-    
-    let URLPoint = "";
-    URLPoint = response.data.init_point;
-    console.log("RESPUESTA PAYMENTCONTROLLER:","FIN - PAYMENTCONTROLLER");
-    console.log('URLPoint: ', URLPoint);
-   algod =
-   {
-     orden: "Porfavor pague en el link:",
-     URLo: URLPoint
-   };
-   console.log("TTTTTTT", "KKKKKKK");
-//   return res.status(201).send({hola:"felipe", URL:"http://tuhermana"}); 
+    try {
+      let response = await axios.post(urlx, bodyx);
+      let URLPoint = response.data.init_point;
+      console.log('URLPoint: ', URLPoint);
 
- return res.status(201).send( algod );   
+      const algod = {
+        orden: 'Por favor, pague en el siguiente enlace:',
+        URLo: URLPoint
+      };
 
+      return res.status(201).send(algod);
     } catch (error) {
-    console.error('Error en la solicitud POST: ', error);
+      console.error('Error en la solicitud POST: ', error);
+      return res.status(500).send({ error: 'Error en la solicitud POST' });
     }
-
-  
-  } catch (error) {  return res.status(500).send({ error: 'Error en consulta' });  }
+  } catch (error) {
+    console.error('Error en consulta: ', error);
+    return res.status(500).send({ error: 'Error en consulta' });
+  }
 };
+
 module.exports = { postOCyDetalle };
 
 
