@@ -75,18 +75,23 @@ router.post('/webhook', receiveWebhook);
   try {
     // Obtener el correo electrónico del usuario desde la referencia externa
     const correoUsuario = req.query.external_reference;
-
+    
     // Buscar la orden de compra por el correo electrónico del usuario
     const {Oc} = require('../db.js'); // Importa el modelo Oc
     const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
     if (orden) {
       // Actualizar el estado de la orden de compra a 'success'
-      orden.estadooc = 'success';
+      orden.estadooc = 'Exitoso';
       await orden.save();
-
+      const fs = require('fs');
+    const path = require('path');
+    const nodemailer = require('nodemailer');
       // Enviar correo electrónico de confirmación al usuario
-      const nodemailer = require('nodemailer');
+      const htmlFilePath = path.join(__dirname, '../html/mailpago.html');
+
+      // Leer el contenido del archivo HTML
+      const htmlContent = fs.readFileSync(htmlFilePath, 'utf-8');
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -98,8 +103,8 @@ router.post('/webhook', receiveWebhook);
       const mailOptions = {
         from: 'all.market.henry@gmail.com',
         to: correoUsuario,
-        subject: 'Confirmación de compra',
-        text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+        subject: '¡Recibo de Compra!',
+        html : htmlContent,
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
@@ -129,7 +134,7 @@ router.get("/pending", async (req, res) => {
 
     if (orden) {
       // Actualizar el estado de la orden de compra a 'pending'
-      orden.estadooc = 'pending';
+      orden.estadooc = 'Pendiente';
       await orden.save();
     }
 
@@ -151,7 +156,7 @@ router.get("/failure", async (req, res) => {
 
     if (orden) {
       // Actualizar el estado de la orden de compra a 'failure'
-      orden.estadooc = 'failure';
+      orden.estadooc = 'Fallido';
       await orden.save();
     }
 
