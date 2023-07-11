@@ -9,8 +9,10 @@ const buscarProductos = async (req, res) => {
     const offset = (pageNumber - 1) * pageSize;
     const arrayCondiciones = []
     var condicionCat =""
-    
+      
     const orden = []
+    arrayCondiciones.push({borrador: false})
+
     if(prod){
       arrayCondiciones.push({ nombreproducto: { [Op.iLike]: `%${prod}%` } })
     }

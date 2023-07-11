@@ -38,7 +38,7 @@ const config = {
   clientID: `${CLIENT_ID}`,
   issuerBaseURL: `${AUTH_URL}`
 };
-
+const {calificarProducto, getAllReviews, getReviewsUsuario, actualizarReview} = require('../controllers/reviewController.js')
 
 const router = Router();
 
@@ -177,6 +177,12 @@ router.get('/ocs', paginadoOc);
 
 // Ruta para obtener los detalles de una OC por login de usuario
 router.get('/ocs/:loginuser', ocDetalleLog);
+
+//Rutas para las reviews
+router.post("/review", calificarProducto);
+router.get("/review/:usuarioId", getReviewsUsuario);
+router.get("/reviews", getAllReviews);
+router.put("/review", actualizarReview);
 
 
 module.exports = router;
