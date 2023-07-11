@@ -72,41 +72,32 @@ const createPaymentPreference = async (req, res) => {
   }
 };
 
-const receiveWebhook = async (req, res) => {
-  try {
-    const { id, topic, resource } = req.body;
+  const receiveWebhook = async (req, res) => {
+    try {
+      const payment = req.query;
+      console.log('payment: ', payment,'...');
+      if (payment.type === "payment") {
+        const data = await mercadopago.payment.findById(payment["data.id"]);
+        console.log(data);
+  
+        // Verificar que el pago se haya realizado con éxito
+        if (data.status === 'approved') {
+          const usuarioId = parseInt(data.external_reference);
+          // Actualizar el estado del pago en la orden de compra en la base de datos
+          const orden = await Oc.findOne({ where: { loginuser: usuarioId } });
 
-    if (topic === 'payment' && resource.status === 'approved') {
-      const usuarioId = parseInt(resource.external_reference);
-
-      const orden = await Oc.findOne({ where: { loginuser: usuarioId } });
-      if (orden) {
-        await orden.update({ estado: 'aprobado' });
-      }
-
-      // Enviar correo electrónico de confirmación al usuario
-      const usuario = await Usuario.findByPk(usuarioId);
-      const mailOptions = {
-        from: 'all.market.henry@gmail.com',
-        to: usuario.email,
-        subject: 'Confirmación de compra',
-        text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
-      };
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error(error);
-        } else {
-          console.log('Correo electrónico enviado:', info.response);
+          if (orden) {
+            await orden.update({ estado: 'aprobado' });
+          }
         }
-      });
+      }
+  
+      res.sendStatus(204);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ error: error.message });
     }
-
-    res.sendStatus(204);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
-  }
-};
+  };
 
 const handlePaymentNotification = async (req, res) => {
   try {

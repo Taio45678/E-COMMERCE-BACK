@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const {Usuario} = require('../db');
+
 module.exports = (sequelize) => {
   const Oc = sequelize.define('oc', {
   idoc: {  type: DataTypes.INTEGER,autoIncrement: true, primaryKey: true,  allowNull: false, },
@@ -7,15 +7,7 @@ module.exports = (sequelize) => {
   hashvalidacionpago: { type: DataTypes.STRING, allowNull: true, },
   loginuser: { type: DataTypes.STRING, allowNull: true,  },
   valortotaloc: { type: DataTypes.INTEGER, allowNull: true,  },
-  estadooc: { type: DataTypes.STRING, allowNull: true,  },
-  usuarioId: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    references: {
-      model: Usuario,
-      key: 'id', // La columna de la tabla "usuarios" que se utilizará para la relación
-    },
-  }});
-  
+  estadooc: { type: DataTypes.STRING, allowNull: true,  }
+  });
   return Oc;
 };
