@@ -120,7 +120,6 @@ const createPaymentPreference = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 const receiveWebhook = async (req, res) => {
   try {
     const payment = req.query;
@@ -132,13 +131,16 @@ const receiveWebhook = async (req, res) => {
 
       // Verificar que el pago se haya realizado con éxito
       if (data.status === 'approved') {
-        const usuarioId = parseInt(data.external_reference);
-        const orden = await Oc.findOne({ where: { loginuser: data.payer.email } });
+        const externalReference = data.external_reference;
+
+        // Buscar la orden de compra por el external_reference
+        const orden = await Oc.findOne({ where: { loginuser: externalReference } });
 
         if (orden) {
+          // Actualizar el estado de la orden de compra a 'aprobado'
           await orden.update({ estadooc: 'aprobado' });
 
-          const usuario = await Usuario.findOne({ where: { email: data.payer.email } });
+          const usuario = await Usuario.findOne({ where: { email: orden.loginuser } });
 
           if (usuario) {
             const mailOptions = {
@@ -166,6 +168,7 @@ const receiveWebhook = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 const handlePaymentNotification = async (req, res) => {
   try {
     // Obtener la información de la notificación de pago de Mercado Pago
