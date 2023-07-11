@@ -73,7 +73,13 @@ fs.readdirSync(path.join(__dirname, '/models'))
     Producto.belongsToMany(Categoria, { through: 'catprod', foreignKey: 'categoriaId'});
     Categoria.belongsToMany(Producto, { through: 'catprod', foreignKey: 'idproducto'})
   
-   
+    Usuario.hasMany(Oc, {
+      foreignKey: 'usuarioId',
+    });
+    
+    Oc.belongsTo(Usuario, {
+      foreignKey: 'usuarioId',
+    });
 Oc.hasMany(Detalleoc, {
   foreignKey: 'ocid',
 });
