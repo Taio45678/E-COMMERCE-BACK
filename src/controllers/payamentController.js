@@ -124,25 +124,25 @@ const handlePaymentNotification = async (req, res) => {
 
     // Verificar que la notificación sea de pago exitoso
     if (topic === 'payment' && resource.status === 'approved') {
-      // Obtener el ID del usuario desde la referencia externa
-      const usuarioId = parseInt(resource.external_reference);
+      // Obtener el correo electrónico del usuario desde la referencia externa
+      const correoUsuario = resource.external_reference;
 
       // Utilizar receiveWebhook para obtener los datos de confirmación
       const paymentData = await receiveWebhook({ query: { type: 'payment', 'data.id': id } });
 
       // Verificar si el pago fue aprobado
       if (paymentData.status === 'approved') {
-        const orden = await Oc.findOne({ where: { loginuser: usuarioId } });
+        const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
         if (orden) {
           await orden.update({ estado: 'aprobado' });
 
           // Buscar el usuario en la base de datos
-          const usuario = await Usuario.findByPk(usuarioId);
+          const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
 
           // Enviar correo electrónico de confirmación al usuario
           const mailOptions = {
             from: 'all.market.henry@gmail.com',
-            to: usuario.email,
+            to: correoUsuario,
             subject: 'Confirmación de compra',
             text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
           };
@@ -163,5 +163,5 @@ const handlePaymentNotification = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-   
+
   module.exports = { createPaymentPreference, receiveWebhook, handlePaymentNotification };
