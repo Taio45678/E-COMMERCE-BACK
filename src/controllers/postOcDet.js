@@ -13,10 +13,7 @@ const postOCyDetalle = async (req, res) => {
   try {
     const fechahoraocaux = new Date();
     const fechahoraoc = fechahoraocaux.toISOString();
-    const newOC = await Oc.create({ fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
-    // Obtener el idoc generado para la OC recién insertada
-    const idoc = newOC.idoc;
-
+    
     // Insertar en la tabla "detalleoc" por cada objeto en "detalleocx"
     for (let i = 0; i < detalleocx.length; i++) {
       const { idproducto, nombreproducto, valorunitario, cant } = detalleocx[i];
@@ -26,6 +23,11 @@ const postOCyDetalle = async (req, res) => {
 
       valortotaloc += subtotal; // Sumar el subtotal al valortotaloc
     }
+
+    // Crear la OC y agregar el valortotaloc
+    const newOC = await Oc.create({ fechahoraoc, loginuser, hashvalidacionpago, valortotaloc, estadooc });
+    const idoc = newOC.idoc;
+
 
     console.log('newOC: ', newOC);
     console.log('idoc: ', newOC.idoc);
