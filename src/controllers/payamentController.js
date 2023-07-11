@@ -83,10 +83,11 @@ const createPaymentPreference = async (req, res) => {
 
    const response = await mercadopago.preferences.create(preference);
    // Devolver la respuesta con la preferencia de pago generada
+   console.log(response.body)
    res.json(response.body);
  } catch (error) {
    console.error(error);
-  // res.status(500).json({ error: error.message });
+   res.status(500).json({ error: error.message });
  }
 };
 
