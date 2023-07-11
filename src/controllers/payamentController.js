@@ -83,6 +83,37 @@ const createPaymentPreference = async (req, res) => {
     };
 
     const response = await mercadopago.preferences.create(preference);
+
+    // Obtener el correo electrónico del usuario desde la referencia externa
+    const correoUsuario = loginuserparam;
+
+    // Buscar la orden de compra por el correo electrónico del usuario
+    const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
+
+    if (orden) {
+      // Actualizar el estado de la orden de compra a 'aprobado'
+      await orden.update({ estadooc: 'aprobado' });
+
+      // Buscar el usuario en la base de datos por su correo electrónico
+      const usuario = await Usuario.findOne({ where: { email: correoUsuario } });
+
+      // Enviar correo electrónico de confirmación al usuario
+      const mailOptions = {
+        from: 'all.market.henry@gmail.com',
+        to: correoUsuario,
+        subject: 'Confirmación de compra',
+        text: '¡Gracias por tu compra! Tu pago ha sido aprobado.',
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log('Correo electrónico enviado:', info.response);
+        }
+      });
+    }
+
     res.json(response.body);
   } catch (error) {
     console.error(error);
