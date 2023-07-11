@@ -81,16 +81,8 @@ const createPaymentPreference = async (req, res) => {
         failure: `${eURL}/failure`,
       },
     };
-
+    await orden.update({ estadooc: 'pendiente' }, { where: { idoc: idocparam } });
     const response = await mercadopago.preferences.create(preference);
-
-    // Marcar la orden de compra como 'pendiente'
-    await oc.update({ estadooc: 'pendiente' });
-
-    // Procesar la notificación de pago en segundo plano
-    handlePaymentNotification(req, res);
-
-    // Enviar la respuesta con la preferencia de pago generada
     res.json(response.body);
   } catch (error) {
     console.error(error);
@@ -156,7 +148,7 @@ const handlePaymentNotification = async (req, res) => {
       // Buscar la orden de compra por el correo electrónico del usuario
       const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
 
-      if (orden) {
+      if (orden && orden.estadooc !== 'aprobado') {
         // Actualizar el estado de la orden de compra a 'aprobado'
         await orden.update({ estadooc: 'aprobado' });
 
