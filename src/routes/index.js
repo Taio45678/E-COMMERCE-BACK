@@ -68,7 +68,7 @@ router.put('/categorias/:id', actualizarCategoria);
 router.delete('/categorias/:id', eliminarCategoria);
 // Rutas pagos 
 router.post('/generar-orden', postOCyDetalle); /**aqui oc y detalle OK  */
-
+router.post('/webhook', receiveWebhook);
  router.post('/create-order', createPaymentPreference);
 
 router.get("/success", (req, res) => res.send("Success"));
