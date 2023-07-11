@@ -105,7 +105,7 @@ const receiveWebhook = async (req, res) => {
         const orden = await Oc.findOne({ where: { loginuser: data.payer.email } });
 
         if (orden) {
-          await orden.update({ estadooc: 'aprobado' });
+         
 
           const usuario = await Usuario.findOne({ where: { email: data.payer.email } });
 
