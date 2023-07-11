@@ -3,6 +3,7 @@ const axios = require('axios');
 const { Oc, Detalleoc } = require('../db');
 
 const { createPaymentPreference } = require('./payamentController.js');
+
 const dummy1 = { "loginuser":"felipejob1@yahoo.com", "idoc":2 };
 
 const postOCyDetalle = async (req, res) => {
@@ -53,9 +54,7 @@ const postOCyDetalle = async (req, res) => {
     }
 
   
-  } catch (error) { 
-    console.log(error);
-     return res.status(500).send({ error: 'Error en consulta' });  }
+  } catch (error) {  return res.status(500).send({ error: 'Error en consulta' });  }
 };
 module.exports = { postOCyDetalle };
 
