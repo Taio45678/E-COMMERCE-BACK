@@ -156,7 +156,7 @@ const handlePaymentNotification = async (req, res) => {
         }
       }
     }
-    
+
     res.sendStatus(204);
   } catch (error) {
     console.error(error);
