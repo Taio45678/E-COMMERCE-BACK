@@ -39,7 +39,7 @@ const config = {
   issuerBaseURL: `${AUTH_URL}`
 };
 const {calificarProducto, getAllReviews, getReviewsUsuario, actualizarReview} = require('../controllers/reviewController.js')
-
+const {paginadoUserOc} = require ('../controllers/exclusivoUser.js');
 const router = Router();
 
 router.get('/producto/buscar', buscarProductos);
@@ -174,6 +174,7 @@ router.post('/payment-notification', handlePaymentNotification);
 
 // Ruta para obtener todas las OCs con sus detalles
 router.get('/ocs', paginadoOc);
+router.get('/ocsUser', paginadoUserOc);
 
 // Ruta para obtener los detalles de una OC por login de usuario
 router.get('/ocs/:loginuser', ocDetalleLog);
