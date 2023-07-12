@@ -57,25 +57,28 @@ axios(options)
       }
     });
   };
-  const updateUserBlockedStatus = async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { blocked } = req.body;
-      const url = `https://dev-jzsyp78gzn6fdoo4.us.auth0.com/api/v2/users/${id}`;
   
-      const response = await axios.patch(url, { blocked }, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-      });
-  
-      res.status(200).json(response.data);
-    } catch (error) {
-      console.error('Error al actualizar el estado de bloqueo del usuario:', error);
-      res.status(500).json({ error: 'Error al actualizar el estado de bloqueo del usuario' });
-    }
-  };
+const updateUserBlockedStatus = async (userId, blocked) => {
+  try {
+    const url = `https://your-domain.auth0.com/api/v2/users/${userId}`;
+    const accessToken = 'YOUR_ACCESS_TOKEN'; // Reemplaza con tu propio token de acceso
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    };
+
+    const data = {
+      blocked: blocked,
+    };
+
+    const response = await axios.patch(url, data, { headers });
+
+    console.log('Usuario actualizado:', response.data);
+  } catch (error) {
+    console.error('Error al actualizar el usuario:', error.response.data);
+  }
+};
+
   const obtenerDatosDeAuth0 = async () => {
     
     try {
