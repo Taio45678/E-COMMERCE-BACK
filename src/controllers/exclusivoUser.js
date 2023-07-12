@@ -17,7 +17,7 @@ const paginadoUserOc = async (req, res) => {
       limit: limitNumber,
       include: [Detalleoc], // Asegúrate de incluir el modelo Detalleoc correctamente
       where: {
-        estadooc: ['aprobado', 'fallido']
+        estadooc: ['Exitoso', 'Fallido']
       }
     });
 
