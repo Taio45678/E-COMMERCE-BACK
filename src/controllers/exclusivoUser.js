@@ -13,11 +13,12 @@ const paginadoUserOc = async (req, res) => {
 
     // Obtener todas las OCs con estadooc "aprobado" o "fallido" y sus detalles y el número total de OCs
     const { count, rows } = await Oc.findAndCountAll({
+      distinct:true,
       offset,
       limit: limitNumber,
       include: [Detalleoc], // Asegúrate de incluir el modelo Detalleoc correctamente
       where: {
-        estadooc: ['Exitoso', 'Fallido']
+        estadooc: ['Exitoso', 'Fallido','Pendiente']
       }
     });
 

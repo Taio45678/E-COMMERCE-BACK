@@ -12,7 +12,8 @@ const paginadoOc = async (req, res) => {
     const offset = (pageNumber - 1) * limitNumber;
 
     // Obtener todas las OCs con estadooc "aprobado" y sus detalles y el número total de OCs
-    const { count, rows } = await Oc.findAll({
+    const { count, rows } = await Oc.findAndCountAll({
+      distinct: true,
       offset,
       limit: limitNumber,
       include: [Detalleoc], // Asegúrate de incluir el modelo Detalleoc correctamente
