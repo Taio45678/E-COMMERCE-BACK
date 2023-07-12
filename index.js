@@ -1,7 +1,7 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 const PORT = process.env.PORT
-const obtenerDatosDeAuth0 = require('./src/controllers/auth0Controller.js')
+const {obtenerDatosDeAuth0} = require('./src/controllers/auth0Controller.js')
 // Syncing all the models at once.
 conn.sync({ force: false }).then(async () => {
   try {
