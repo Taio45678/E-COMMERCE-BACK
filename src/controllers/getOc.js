@@ -1,4 +1,4 @@
-const {Oc , Detalleoc}  = require('../db');
+const { Oc, Detalleoc } = require('../db');
 
 const paginadoOc = async (req, res) => {
   const { page, limit } = req.query;
@@ -11,11 +11,14 @@ const paginadoOc = async (req, res) => {
     // Calcular el offset para la consulta
     const offset = (pageNumber - 1) * limitNumber;
 
-    // Obtener todas las OCs con sus detalles y el número total de OCs
+    // Obtener todas las OCs con estadooc "aprobado" y sus detalles y el número total de OCs
     const { count, rows } = await Oc.findAndCountAll({
       offset,
       limit: limitNumber,
-      include: [Detalleoc] // Asegúrate de incluir el modelo Detalleoc correctamente
+      include: [Detalleoc], // Asegúrate de incluir el modelo Detalleoc correctamente
+      where: {
+        estadooc: 'Exitoso'
+      }
     });
 
     // Crear objeto de respuesta con los datos paginados
