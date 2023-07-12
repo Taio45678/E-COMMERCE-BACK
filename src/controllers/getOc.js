@@ -53,7 +53,7 @@ const ocDetalleLog = async (req, res) => {
         return res.status(404).send({ error: 'OC no encontrada' });
       }
   
-      return res.status(200).send(oc.Detalleocs);
+      return res.status(200).send(oc);
     } catch (error) {
       console.log(error)
       return res.status(500).send({ error: 'Error en consulta' });
