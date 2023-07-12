@@ -57,31 +57,6 @@ axios(options)
       }
     });
   };
-  
-  
-const updateUserBlockedStatus = async (userId, blocked) => {
-  try {
-    const url = `https://dev-jzsyp78gzn6fdoo4.us.auth0.com/api/v2/users${userId}`;
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    };
-
-    const data = {
-      blocked: blocked,
-    };
-
-    const response = await axios.patch(url, data, { headers });
-
-    console.log('Usuario actualizado:', response.data);
-  } catch (error) {
-    if (error.response) {
-      console.error('Error al actualizar el usuario:', error.response.data);
-    } else {
-      console.error('Error al actualizar el usuario:', error);
-    }
-  }
-};
   const obtenerDatosDeAuth0 = async () => {
     
     try {
@@ -114,7 +89,7 @@ const updateUserBlockedStatus = async (userId, blocked) => {
   
         if (existingUser) {
           // El usuario ya existe, actualizar los datos si es necesario
-          existingUser.email = email;
+          
           existingUser.emailVerified = email_verified;
           existingUser.name = name;
           existingUser.nickname = nickname;
