@@ -66,7 +66,6 @@ const actualizarIsBan = async (req, res) => {
 
     // Obtener el valor actual de 'isBan'
     const isBanActual = usuario.isBan;
-
     // Actualizar el valor de 'isBan' a su valor opuesto
     usuario.isBan = !isBanActual;
 
