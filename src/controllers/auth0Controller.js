@@ -61,9 +61,6 @@ axios(options)
     try {
       const { id } = req.params;
       const { blocked } = req.body;
-  
-      const accessToken = await getAccessToken();
-  
       const url = `https://dev-jzsyp78gzn6fdoo4.us.auth0.com/api/v2/users/${id}`;
   
       const response = await axios.patch(url, { blocked }, {
