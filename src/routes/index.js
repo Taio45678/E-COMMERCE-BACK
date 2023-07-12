@@ -40,7 +40,7 @@ const config = {
 };
 const {calificarProducto, getAllReviews, getReviewsUsuario, actualizarReview} = require('../controllers/reviewController.js')
 const {paginadoUserOc} = require ('../controllers/exclusivoUser.js');
-const {updateUserBlockedStatus} = require ('../controllers/auth0Controller.js');
+
 const router = Router();
 
 router.get('/producto/buscar', buscarProductos);

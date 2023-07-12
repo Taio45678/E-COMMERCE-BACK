@@ -129,4 +129,4 @@ axios(options)
   };
   
   // Llamar a la función para cargar los datos al iniciar el servidor
- module.exports = {obtenerDatosDeAuth0 , updateUserBlockedStatus};
+ module.exports = {obtenerDatosDeAuth0};
