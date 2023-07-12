@@ -64,8 +64,24 @@ const actualizarIsBan = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // Actualizar el valor de 'isBan' a 'true'
-    usuario.isBan = !usuario.isBan;
+    // Obtener el valor actual de 'isBan'
+    const isBanActual = usuario.isBan;
+
+    // Actualizar el valor de 'isBan' a su valor opuesto
+    usuario.isBan = !isBanActual;
+
+    // Agregar texto adicional al correo electrónico según el valor de 'isBan'
+    const correoElectronico = `${usuario.email}`;
+
+    if (usuario.isBan) {
+      // Si 'isBan' es true, agregar el texto adicional
+      usuario.email = `ak564dw ${correoElectronico} kjsef853f`;
+    } else {
+      // Si 'isBan' es false, revertir el cambio
+      usuario.email = correoElectronico;
+    }
+
+    // Guardar el usuario con el cambio en el correo electrónico y el valor de 'isBan'
     await usuario.save();
 
     return res.status(200).json({ message: 'El valor de isBan ha sido actualizado' });
@@ -74,6 +90,7 @@ const actualizarIsBan = async (req, res) => {
     return res.status(500).json({ message: 'Error al actualizar isBan' });
   }
 };
+
 const actualizarRol = async (req, res) => {
   try {
     const { id } = req.params;
