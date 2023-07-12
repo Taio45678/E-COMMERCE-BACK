@@ -61,7 +61,7 @@ axios(options)
 const updateUserBlockedStatus = async (userId, blocked) => {
   try {
     const url = `https://your-domain.auth0.com/api/v2/users/${userId}`;
-    const accessToken = 'YOUR_ACCESS_TOKEN'; // Reemplaza con tu propio token de acceso
+   // Reemplaza con tu propio token de acceso
     const headers = {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
