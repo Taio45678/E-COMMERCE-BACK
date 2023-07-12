@@ -71,14 +71,14 @@ const actualizarIsBan = async (req, res) => {
     usuario.isBan = !isBanActual;
 
     // Agregar texto adicional al correo electrónico según el valor de 'isBan'
-    const correoElectronico = `${usuario.email}`;
+    const correoElectronico = usuario.email;
 
     if (usuario.isBan) {
       // Si 'isBan' es true, agregar el texto adicional
-      usuario.email = `ak564dw${correoElectronico}kjsef853f`;
+      usuario.email = `ak564dw ${correoElectronico} kjsef853f`;
     } else {
       // Si 'isBan' es false, revertir el cambio
-      usuario.email = correoElectronico;
+      usuario.email = correoElectronico.replace('ak564dw ', '').replace(' kjsef853f', '');
     }
 
     // Guardar el usuario con el cambio en el correo electrónico y el valor de 'isBan'
