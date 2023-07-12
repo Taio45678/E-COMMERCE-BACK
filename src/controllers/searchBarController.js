@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
 const db = require('../db.js');
-
 const buscarProductos = async (req, res) => {
   try {
     const { prod, cate, page, limit, color, price } = req.query;
@@ -38,22 +37,23 @@ const buscarProductos = async (req, res) => {
           arrayCondiciones
 
         },
-        include: {
+        include: [{
           model: db.Categoria,
           where: condicionCat,
           attributes: ['nombrecat'],
           through: {attributes: []},
           required: true
-        },
+        }, db.Review],
+        distinct: true,
         offset: offset,
         limit: pageSize,
       });
       const totalPages = Math.ceil(count / pageSize);
       const arrayRespuesta = []
       rows.forEach(producto => {
-        const {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria} = producto
+        const {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria, reviews} = producto
         var namecat = categoria[0].nombrecat
-        const productoFinal = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat}
+        const productoFinal = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat, reviews}
         arrayRespuesta.push(productoFinal)
       });
 
@@ -73,22 +73,23 @@ const buscarProductos = async (req, res) => {
           [Op.and]:
           arrayCondiciones
         },
-        include: {
+        include: [{
           model: db.Categoria,
           where: condicionCat,
           attributes: ['nombrecat'],
           through: {attributes: []},
           required: true
-        },
+        }, db.Review],
+        distinct: true,
         offset: offset,
         limit: pageSize,
       });
       const totalPages = Math.ceil(count / pageSize);
       const arrayRespuesta = []
       rows.forEach(producto => {
-        const {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria} = producto
+        const {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, categoria, reviews} = producto
         var namecat = categoria[0].nombrecat
-        const productoFinal = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat}
+        const productoFinal = {id, nombreproducto, descproducto, colorproducto, fotoprinc, precioproducto, disponibproducto, nombrecat: namecat, reviews}
         arrayRespuesta.push(productoFinal)
       });
       res.json({
