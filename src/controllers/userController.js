@@ -68,7 +68,7 @@ const actualizarIsBan = async (req, res) => {
     const isBanActual = usuario.isBan;
     // Actualizar el valor de 'isBan' a su valor opuesto
     usuario.isBan = !isBanActual;
-
+    await usuario.save();
     // Agregar texto adicional al correo electrónico según el valor de 'isBan'
     const correoElectronico = usuario.email;
 
