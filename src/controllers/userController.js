@@ -75,13 +75,15 @@ const actualizarIsBan = async (req, res) => {
     if (usuario.isBan) {
       // Si 'isBan' es true, agregar el texto adicional
       usuario.email = `ak564dw ${correoElectronico} kjsef853f`;
+      await usuario.save();
     } else {
       // Si 'isBan' es false, revertir el cambio
       usuario.email = correoElectronico.replace('ak564dw ', '').replace(' kjsef853f', '');
+      await usuario.save();
     }
 
     // Guardar el usuario con el cambio en el correo electrónico y el valor de 'isBan'
-    await usuario.save();
+   
 
     return res.status(200).json({ message: 'El valor de isBan ha sido actualizado' });
   } catch (error) {
