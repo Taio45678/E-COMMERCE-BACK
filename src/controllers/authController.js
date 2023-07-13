@@ -8,7 +8,6 @@ async function crearNuevoUsuario(login, username, hashedPassword, telefono, dire
     const usuario = await Usuario.create({
       login: login,
       username: username,
-      password: hashedPassword,
       telefono: telefono,
       direccion: direccion,
       rol: 2

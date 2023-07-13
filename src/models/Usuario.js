@@ -37,11 +37,8 @@ module.exports = (sequelize) => {
       allowNull: false
     },
     rol: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        isIn: [[1, 2]], // 1 para usuario, 2 para admin
-      },
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     isBan: {
       type: DataTypes.BOOLEAN,
@@ -66,7 +63,23 @@ module.exports = (sequelize) => {
     logins_count: {
       type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    nombre:{
+      type:DataTypes.STRING,
+      allowNull: true,
+    },
+    fechaNacimiento: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    direccion:{
+      type:DataTypes.STRING,
+      allowNull: true,
+    },
+    telefono:{
+      type:DataTypes.STRING,
+      allowNull:true,
+    },
   });
   
   Usuario.associate = (models) => {

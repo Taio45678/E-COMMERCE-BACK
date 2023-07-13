@@ -27,7 +27,7 @@ const {
 } = require('../controllers/categoriaController.js');
 const { postOCyDetalle} = require('../controllers/postOcDet.js');
 const buscarProductos = require('../controllers/searchBarController.js');
-const { obtenerDatosUsuarios ,obtenerDatosUsuario,actualizarIsBan,actualizarRol } = require('../controllers/userController');
+const { obtenerDatosUsuarios ,obtenerDatosUsuario,actualizarIsBan,actualizarRol,actualizarUsuario } = require('../controllers/userController');
 const {guardarUsuario} = require('../controllers/auth0Controller.js');
 const { paginadoOc,ocDetalleLog } = require('../controllers/getOc.js');
 const config = {
@@ -57,8 +57,9 @@ router.post('/usuarios/:idUsuario/carritoCrear', /*auth(config),*/ agregarProduc
 router.delete('/usuarios/:idUsuario/carrito/:idProducto', /*auth(config),*/ eliminarProductoCarrito);
 
 //este es la ruta para auth0 se supone
-router.put('/usuarios/:id/isban', actualizarIsBan);
-router.put('/usuarios/:id/rol', actualizarRol);
+router.put('usuarios/:sub', actualizarUsuario)
+router.put('/usuarios/:sub/isban', actualizarIsBan);
+router.put('/usuarios/:sub/rol', actualizarRol);
 router.get('/usuarios/:sub', obtenerDatosUsuario);
 router.get('/usuarios', obtenerDatosUsuarios);
 //categorias

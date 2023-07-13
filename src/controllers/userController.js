@@ -56,10 +56,11 @@ const obtenerDatosUsuario = async (req, res) => {
 
 const actualizarIsBan = async (req, res) => {
   try {
-    const { id } = req.params;
+     // Obtener el sub del usuario desde los parámetros de la solicitud
+     const { sub } = req.params;
 
-    // Buscar el usuario por su ID
-    const usuario = await Usuario.findByPk(id);
+     // Buscar el usuario en la base de datos por el campo 'sub'
+     const usuario = await Usuario.findOne({ where: { sub } });
 
     if (!usuario) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -95,10 +96,11 @@ const actualizarIsBan = async (req, res) => {
 
 const actualizarRol = async (req, res) => {
   try {
-    const { id } = req.params;
+     // Obtener el sub del usuario desde los parámetros de la solicitud
+     const { sub } = req.params;
 
-    // Buscar el usuario por su ID
-    const usuario = await Usuario.findByPk(id);
+     // Buscar el usuario en la base de datos por el campo 'sub'
+     const usuario = await Usuario.findOne({ where: { sub } });
 
     if (!usuario) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -114,4 +116,31 @@ const actualizarRol = async (req, res) => {
     return res.status(500).json({ message: 'Error al actualizar rol' });
   }
 };
-module.exports = { obtenerDatosUsuarios , obtenerDatosUsuario,actualizarIsBan,actualizarRol };
+async function actualizarUsuario(req, res) {
+  const { sub } = req.params;
+
+  // Buscar el usuario en la base de datos por el campo 'sub'
+  
+
+  const { nombre, direccion, telefono, fechaNacimiento,  } = req.body;
+
+  try {
+    const usuario = await Usuario.findOne({ where: { sub } });
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'usuario no encontrado' });
+    }
+
+    usuario.nombre = nombre;
+    usuario.direccion = direccion;
+    usuario.telefono = telefono;
+    usuario.fechaNacimiento = fechaNacimiento;
+    await usuario.save();
+
+    res.json(usuario);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ mensaje: 'Error al actualizar el producto' });
+  }
+}
+module.exports = { obtenerDatosUsuarios , obtenerDatosUsuario,actualizarIsBan,actualizarRol,actualizarUsuario};

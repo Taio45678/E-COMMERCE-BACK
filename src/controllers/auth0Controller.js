@@ -110,13 +110,17 @@ axios(options)
             picture,
             sub: user_id,
             password: '', // Agrega el valor correcto si es necesario
-            rol: 1, // Agrega el valor correcto si es necesario
+            rol: false, // Agrega el valor correcto si es necesario
             isBan: false,
             created_at,
             updated_at,
             last_login,
             last_ip,
-            logins_count
+            logins_count,
+            nombre,
+            direccion,
+            telefono,
+            fechaNacimiento,
           });
           // Enviar correo de bienvenida al nuevo usuario
           enviarCorreoBienvenida(email);
