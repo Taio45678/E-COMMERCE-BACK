@@ -118,29 +118,28 @@ const actualizarRol = async (req, res) => {
 };
 async function actualizarUsuario(req, res) {
   const { sub } = req.params;
-
-  // Buscar el usuario en la base de datos por el campo 'sub'
-  
-
-  const { nombre, direccion, telefono, fechaNacimiento,  } = req.body;
+  const { nombre, direccion, telefono, fechaNacimiento } = req.body;
 
   try {
     const usuario = await Usuario.findOne({ where: { sub } });
 
     if (!usuario) {
-      return res.status(404).json({ mensaje: 'usuario no encontrado' });
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
 
-    usuario.nombre = nombre;
-    usuario.direccion = direccion;
-    usuario.telefono = telefono;
-    usuario.fechaNacimiento = fechaNacimiento;
+    usuario.nombre = nombre || usuario.nombre;
+    usuario.direccion = direccion || usuario.direccion;
+    usuario.telefono = telefono || usuario.telefono;
+    usuario.fechaNacimiento = fechaNacimiento || usuario.fechaNacimiento;
+
     await usuario.save();
 
     res.json(usuario);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ mensaje: 'Error al actualizar el producto' });
+    console.error('Error al actualizar el usuario:', error);
+    res.status(500).json({ mensaje: 'Error del servidor' });
   }
 }
+
+module.exports = { actualizarUsuario };
 module.exports = { obtenerDatosUsuarios , obtenerDatosUsuario,actualizarIsBan,actualizarRol,actualizarUsuario};

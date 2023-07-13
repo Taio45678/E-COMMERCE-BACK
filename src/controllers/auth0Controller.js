@@ -117,10 +117,10 @@ axios(options)
             last_login,
             last_ip,
             logins_count,
-            nombre: null,
-            direccion: null,
-            telefono : null,
-            fechaNacimiento: null,
+            nombre: '',
+            direccion: '',
+            telefono : '',
+            fechaNacimiento: '',
           });
           // Enviar correo de bienvenida al nuevo usuario
           enviarCorreoBienvenida(email);
