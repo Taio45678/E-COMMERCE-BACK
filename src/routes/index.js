@@ -43,7 +43,7 @@ const {paginadoUserOc} = require ('../controllers/exclusivoUser.js');
 
 const router = Router();
 
-router.patch('/producto/buscar', buscarProductos);
+router.get('/producto/buscar', buscarProductos);
 router.get('/producto', buscarProductos);
 router.post('/productoCrear', /*auth(config),*/ crearProducto);
 router.get('/producto/:id', obtenerProductoPorId);
