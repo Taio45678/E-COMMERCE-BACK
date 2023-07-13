@@ -107,7 +107,7 @@ const actualizarRol = async (req, res) => {
     }
 
     // Actualizar el valor de 'rol' a 1
-    usuario.rol = 2;
+    usuario.rol = true;
     await usuario.save();
 
     return res.status(200).json({ message: 'El usuario ahora es Admin' });
