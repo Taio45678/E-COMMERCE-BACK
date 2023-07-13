@@ -34,11 +34,11 @@ const obtenerDatosUsuarios = async (req, res) => {
 // obtener todos los datos de un usuario
 const obtenerDatosUsuario = async (req, res) => {
   try {
-    // Obtener el ID del usuario desde los parámetros de la solicitud
-    const { Usub } = req.params;
+    // Obtener el sub del usuario desde los parámetros de la solicitud
+    const { sub } = req.params;
 
-    // Buscar el usuario en la base de datos
-    const usuario = await Usuario.findOne({ where: { sub: Usub} });
+    // Buscar el usuario en la base de datos por el campo 'sub'
+    const usuario = await Usuario.findOne({ where: { sub } });
 
     if (!usuario) {
       // Si el usuario no existe, devolver una respuesta de error
@@ -53,6 +53,7 @@ const obtenerDatosUsuario = async (req, res) => {
     res.status(500).json({ error: 'Error del servidor' });
   }
 };
+
 const actualizarIsBan = async (req, res) => {
   try {
     const { id } = req.params;
