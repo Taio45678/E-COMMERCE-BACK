@@ -35,10 +35,10 @@ const obtenerDatosUsuarios = async (req, res) => {
 const obtenerDatosUsuario = async (req, res) => {
   try {
     // Obtener el ID del usuario desde los parámetros de la solicitud
-    const { userId } = req.params;
+    const { Usub } = req.params;
 
     // Buscar el usuario en la base de datos
-    const usuario = await Usuario.findOne({ where: { id: userId } });
+    const usuario = await Usuario.findOne({ where: { sub: Usub} });
 
     if (!usuario) {
       // Si el usuario no existe, devolver una respuesta de error
