@@ -43,7 +43,8 @@ const ocDetalleLog = async (req, res) => {
   
     try {
       // Buscar la OC por login de usuario
-      const oc = await Oc.findOne({
+      const oc = await Oc.findAll({
+        distinct:true,
         where: {
           loginuser: loginuser
         },
