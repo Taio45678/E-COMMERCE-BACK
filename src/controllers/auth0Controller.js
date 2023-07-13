@@ -120,7 +120,7 @@ axios(options)
             nombre: '',
             direccion: '',
             telefono : '',
-            fechaNacimiento: '',
+            fechaNacimiento: new Date(),
           });
           // Enviar correo de bienvenida al nuevo usuario
           enviarCorreoBienvenida(email);
