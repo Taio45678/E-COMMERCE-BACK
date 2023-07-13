@@ -57,9 +57,9 @@ router.post('/usuarios/:idUsuario/carritoCrear', /*auth(config),*/ agregarProduc
 router.delete('/usuarios/:idUsuario/carrito/:idProducto', /*auth(config),*/ eliminarProductoCarrito);
 
 //este es la ruta para auth0 se supone
-router.put('usuarios/:sub', actualizarUsuario);
-router.put('/usuarios/:sub/isban', actualizarIsBan);
-router.put('/usuarios/:sub/rol', actualizarRol);
+router.put('usuarios/:id', actualizarUsuario);
+router.put('/usuarios/:id/isban', actualizarIsBan);
+router.put('/usuarios/:id/rol', actualizarRol);
 router.get('/usuarios/:sub', obtenerDatosUsuario);
 router.get('/usuarios', obtenerDatosUsuarios);
 //categorias

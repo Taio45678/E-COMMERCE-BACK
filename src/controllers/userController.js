@@ -55,12 +55,13 @@ const obtenerDatosUsuario = async (req, res) => {
 };
 
 const actualizarIsBan = async (req, res) => {
+  const { id } = req.params;
   try {
      // Obtener el sub del usuario desde los parámetros de la solicitud
-     const { sub } = req.params;
+     
 
      // Buscar el usuario en la base de datos por el campo 'sub'
-     const usuario = await Usuario.findOne({ where: { sub } });
+     const usuario = await Usuario.findByPk(id);
 
     if (!usuario) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -95,12 +96,13 @@ const actualizarIsBan = async (req, res) => {
 };
 
 const actualizarRol = async (req, res) => {
+  const { id } = req.params;
   try {
      // Obtener el sub del usuario desde los parámetros de la solicitud
-     const { sub } = req.params;
+     
 
      // Buscar el usuario en la base de datos por el campo 'sub'
-     const usuario = await Usuario.findOne({ where: { sub } });
+     const usuario = await Usuario.findByPk(id);
 
     if (!usuario) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
@@ -117,11 +119,11 @@ const actualizarRol = async (req, res) => {
   }
 };
 async function actualizarUsuario(req, res) {
-  const { sub } = req.params;
+  const { id } = req.params;
   const { nombre, direccion, telefono, fechaNacimiento } = req.body;
 
   try {
-    const usuario = await Usuario.findOne({ where: { sub } });
+    const usuario = await Usuario.findByPk(id);
 
     if (!usuario) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
@@ -141,5 +143,5 @@ async function actualizarUsuario(req, res) {
   }
 }
 
-module.exports = { actualizarUsuario };
+
 module.exports = { obtenerDatosUsuarios , obtenerDatosUsuario,actualizarIsBan,actualizarRol,actualizarUsuario};
