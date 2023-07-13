@@ -80,7 +80,7 @@ router.post('/webhook', receiveWebhook);
     
     // Buscar la orden de compra por el correo electrónico del usuario
     const {Oc} = require('../db.js'); // Importa el modelo Oc
-    const orden = await Oc.findOne({ where: { loginuser: correoUsuario } });
+    const orden = await Oc.findOne({ where: {estadooc: 'pendiente' , loginuser: correoUsuario } });
 
     if (orden) {
       // Actualizar el estado de la orden de compra a 'success'
